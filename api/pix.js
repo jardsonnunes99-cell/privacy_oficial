@@ -64,12 +64,50 @@ export default async function handler(req, res) {
     }
 
     // Retorna o formato esperado pelo frontend
-    return res.status(201).json({
+    const responseData = {
       pix_code: data.pix.code,
       pix_image: data.pix.image,
       transactionId: data.transactionId,
       identifier: payload.identifier
-    });
+    };
+
+    // Meta CAPI - InitiateCheckout (Server-side tracking)
+    try {
+      const META_PIXEL_ID = '3046746782192073';
+      const META_ACCESS_TOKEN = 'EAA4kfEmICLcBRGww2BKhhMTZBoRAkRaUJC6Q2FdUV8ahFbKEECtl2qlOtZAZBCpmZCiqjK8Cqmz8mbomqNmRUYQBt6JjM6atfhim78OgsGJHM4q5qr07HkBarRLYQXGhJwtXFCIqdiK8IIZB3z2EnYCB6b7ZA9J9ZC8AoOm8hgUGtNwVLQ0VOyOOf68B0wtrQZDZD';
+      
+      const crypto = require('crypto');
+      const hash = (str) => crypto.createHash('sha256').update(str.trim().toLowerCase()).digest('hex');
+
+      const metaEvent = {
+        data: [{
+          event_name: 'InitiateCheckout',
+          event_time: Math.floor(Date.now() / 1000),
+          action_source: 'website',
+          event_source_url: req.headers.referer || '',
+          user_data: {
+            ph: [hash(finalPhone)],
+            em: [hash(finalEmail)],
+            client_ip_address: req.headers['x-forwarded-for'] || req.socket.remoteAddress,
+            client_user_agent: req.headers['user-agent']
+          },
+          custom_data: {
+            currency: 'BRL',
+            value: parseFloat(amount)
+          }
+        }]
+      };
+
+      await fetch(`https://graph.facebook.com/v19.0/${META_PIXEL_ID}/events?access_token=${META_ACCESS_TOKEN}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(metaEvent)
+      });
+    } catch (e) {
+      console.error('Meta CAPI Error:', e);
+    }
+
+    return res.status(201).json(responseData);
 
   } catch (error) {
     console.error('Server Error:', error);
