@@ -61,7 +61,8 @@ video {
 
 .logo img {
     height: 80px;
-    width: auto;
+    width: 280px; /* Explicit width for CLS */
+    object-fit: contain;
 }
 
 .right-container {
@@ -147,6 +148,7 @@ main {
     height: 250px;
     position: relative;
     overflow: hidden;
+    background-color: #f0f0f0; /* Placeholder color while loading */
 }
 
 .cover-image img {
@@ -666,6 +668,7 @@ main {
     }
     .logo img {
         height: 70px;
+        width: 245px; /* Scaled width for mobile */
     }
     .right-container {
         display: none;
