@@ -2620,6 +2620,13 @@
                                         currency: 'BRL',
                                         transaction_id: txId
                                     });
+                                    // Meta Pixel Purchase
+                                    if (window.fbq) {
+                                        window.fbq('track', 'Purchase', {
+                                            value: value,
+                                            currency: 'BRL'
+                                        });
+                                    }
                                 } catch (e) {}
                             } else if (attempts > 0) {
                                 setTimeout(function() {
