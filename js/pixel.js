@@ -583,19 +583,7 @@
                     static get baseUrl() {
                         return "localhost" === window.location.hostname || "127.0.0.1" === window.location.hostname ? "http://localhost:3001/tracking/v1" : "https://tracking.utmify.com.br/tracking/v1"
                     }
-                    static sanitize(obj) {
-                        if (Array.isArray(obj)) return obj.map(v => this.sanitize(v));
-                        if (obj !== null && typeof obj === 'object') {
-                            return Object.fromEntries(
-                                Object.entries(obj)
-                                    .filter(([_, v]) => v !== null && v !== undefined)
-                                    .map(([k, v]) => [k, this.sanitize(v)])
-                            );
-                        }
-                        return obj;
-                    }
                     static event(t) {
-                        t = this.sanitize(t);
                         var e, i, n, o, r, a, d, c, u, v, p, g, h, f, y, m, b, T, k, w, _, C, x, L, I, P, F, M, S, O, j, A, U, E, B, N, R, D, $, V, q, K, W, z, G, H, J, Y, Z, Q, X, tt, et, it, nt, ot, lt, rt, at, st, dt, ct, ut, vt, pt;
                         return l(this, void 0, void 0, (function*() {
                             const l = `${this.baseUrl}/events`,
@@ -606,11 +594,13 @@
                                     },
                                     body: JSON.stringify(t)
                                 }).then((t => t.ok ? t.json() : null)).catch(() => null);
+                            
                             if (!gt || !gt.lead || !gt.lead._id) {
-                                console.warn(`[UTMify] Server responded with error or invalid data. Skipping event registration.`);
+                                console.warn(`[UTMify] Tracking server error or invalid response.`);
                                 return null;
                             }
-                            if (console.log(`response for ${null===(e=t.lead)||void 0===e?void 0:e.pixelId}: ${null===(i=null==gt?void 0:gt.lead)||void 0===i?void 0:i.metaPixelIds}`), false) return null; // Original check removed for flow
+                            
+                            console.log('[UTMify] Event registered successfully:', gt.lead._id);
 
                             const ht = new s.Lead({
                                 _id: gt.lead._id,
