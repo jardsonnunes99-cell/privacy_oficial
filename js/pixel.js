@@ -1,5 +1,6 @@
 (() => {
     "use strict";
+    console.log("%c🚀 UTMify Pixel v4.0 - Active", "color: #ff6b3d; font-weight: bold;");
     var t = {
             370: (t, e) => {
                 Object.defineProperty(e, "__esModule", {
@@ -324,52 +325,53 @@
                             c.monitorLinks(!1), c.monitorButtons(!1), c.monitorForms(!1)
                         })))
                     }
-                    static monitorButtons(t) {
-                        const buttons = Array.from(document.querySelectorAll("button"));
-                        console.log("UTMify Buttons found:", buttons.length);
-                        buttons.forEach((btn => {
-                            if (t || this.canUseEl(btn)) {
-                                btn.addEventListener("click", (evt => {
-                                    var txt = btn.textContent || "";
-                                    var cls = btn.className || "";
-                                    console.log("UTMify Button clicked:", txt);
+                    static monitorButtons(initialMode) {
+                        const targetButtons = Array.from(document.querySelectorAll("button"));
+                        console.log("[UTMify] Monitoring buttons:", targetButtons.length);
+                        targetButtons.forEach((currentBtn => {
+                            if (initialMode || this.canUseEl(currentBtn)) {
+                                currentBtn.addEventListener("click", (clickEvent => {
+                                    const btnLabel = currentBtn.textContent || "";
+                                    const btnClasses = currentBtn.className || "";
+                                    console.log("[UTMify] Click detected on button:", btnLabel);
                                     
-                                    if (c.isCheckoutButtonText(txt) || c.isCheckoutButtonClassList(cls)) {
-                                        console.log("UTMify Tracking InitiateCheckout");
+                                    if (c.isCheckoutButtonText(btnLabel) || c.isCheckoutButtonClassList(btnClasses)) {
+                                        console.log("[UTMify] Event: InitiateCheckout (Button)");
                                         s.Tracker.track("InitiateCheckout");
                                     }
-                                    if (c.isLeadButtonText(txt)) {
-                                        console.log("UTMify Tracking Lead");
+                                    if (c.isLeadButtonText(btnLabel)) {
+                                        console.log("[UTMify] Event: Lead (Button)");
                                         s.Tracker.track("Lead");
                                     }
-                                    if (c.isAddToCartButtonText(txt)) {
-                                        console.log("UTMify Tracking AddToCart");
+                                    if (c.isAddToCartButtonText(btnLabel)) {
+                                        console.log("[UTMify] Event: AddToCart (Button)");
                                         s.Tracker.track("AddToCart");
                                     }
                                 }), !0);
                             }
                         }));
                     }
-                    static monitorForms(tInitial) {
-                        Array.from(document.querySelectorAll("form")).forEach((formEl => {
-                            if (tInitial || this.canUseEl(formEl)) {
-                                formEl.addEventListener("submit", (submitEvt => {
-                                    const submitBtn = formEl.querySelector('button[type="submit"]');
-                                    var btnText = submitBtn ? (submitBtn.textContent || "") : "";
-                                    var btnCls = submitBtn ? (submitBtn.className || "") : "";
+                    static monitorForms(initialState) {
+                        const allForms = Array.from(document.querySelectorAll("form"));
+                        allForms.forEach((activeForm => {
+                            if (initialState || this.canUseEl(activeForm)) {
+                                activeForm.addEventListener("submit", (submitEvent => {
+                                    const targetSubmitBtn = activeForm.querySelector('button[type="submit"]');
+                                    const submitBtnText = targetSubmitBtn ? (targetSubmitBtn.textContent || "") : "";
+                                    const submitBtnClasses = targetSubmitBtn ? (targetSubmitBtn.className || "") : "";
                                     
-                                    console.log("UTMify Form submmited, button:", btnText);
+                                    console.log("[UTMify] Form submission caught:", submitBtnText);
                                     
-                                    if (c.isCheckoutButtonText(btnText) || c.isCheckoutButtonClassList(btnCls) || c.isCheckoutLink(formEl.action, "", "")) {
-                                        console.log("UTMify Tracking InitiateCheckout (Form)");
+                                    if (c.isCheckoutButtonText(submitBtnText) || c.isCheckoutButtonClassList(submitBtnClasses) || c.isCheckoutLink(activeForm.action, "", "")) {
+                                        console.log("[UTMify] Event: InitiateCheckout (Form)");
                                         s.Tracker.track("InitiateCheckout");
                                     }
-                                    if (c.isLeadButtonText(btnText)) {
-                                        console.log("UTMify Tracking Lead (Form)");
+                                    if (c.isLeadButtonText(submitBtnText)) {
+                                        console.log("[UTMify] Event: Lead (Form)");
                                         s.Tracker.track("Lead");
                                     }
-                                    if (c.isAddToCartButtonText(btnText)) {
-                                        console.log("UTMify Tracking AddToCart (Form)");
+                                    if (c.isAddToCartButtonText(submitBtnText)) {
+                                        console.log("[UTMify] Event: AddToCart (Form)");
                                         s.Tracker.track("AddToCart");
                                     }
                                 }), !0);
@@ -385,27 +387,28 @@
                             })), null) : o()
                         }
                     }
-                    static monitorLinks(tInitial) {
-                        Array.from(document.querySelectorAll("a")).forEach((linkEl => {
-                            if (tInitial || this.canUseEl(linkEl)) {
-                                linkEl.addEventListener("click", (clickEvt => {
-                                    var href = linkEl.href || "";
-                                    var txt = linkEl.textContent || "";
-                                    var cls = linkEl.classList;
+                    static monitorLinks(initialTrigger) {
+                        const targetLinks = Array.from(document.querySelectorAll("a"));
+                        targetLinks.forEach((activeLink => {
+                            if (initialTrigger || this.canUseEl(activeLink)) {
+                                activeLink.addEventListener("click", (linkEvent => {
+                                    const currentHref = activeLink.href || "";
+                                    const currentText = activeLink.textContent || "";
+                                    const currentClasses = activeLink.classList;
                                     
-                                    console.log("UTMify Link clicked:", txt);
+                                    console.log("[UTMify] Link click detected:", currentText);
                                     
-                                    if (c.isCheckoutLink(href, txt, cls)) {
-                                        console.log("UTMify Tracking InitiateCheckout (Link)");
-                                        c.waitBeforeAction(clickEvt, s.Tracker.track("InitiateCheckout"), linkEl);
+                                    if (c.isCheckoutLink(currentHref, currentText, currentClasses)) {
+                                        console.log("[UTMify] Event: InitiateCheckout (Link)");
+                                        c.waitBeforeAction(linkEvent, s.Tracker.track("InitiateCheckout"), activeLink);
                                     }
-                                    if (c.isLeadButtonText(txt)) {
-                                        console.log("UTMify Tracking Lead (Link)");
-                                        c.waitBeforeAction(clickEvt, s.Tracker.track("Lead"), linkEl);
+                                    if (c.isLeadButtonText(currentText)) {
+                                        console.log("[UTMify] Event: Lead (Link)");
+                                        c.waitBeforeAction(linkEvent, s.Tracker.track("Lead"), activeLink);
                                     }
-                                    if (c.isAddToCartButtonText(txt)) {
-                                        console.log("UTMify Tracking AddToCart (Link)");
-                                        c.waitBeforeAction(clickEvt, s.Tracker.track("AddToCart"), linkEl);
+                                    if (c.isAddToCartButtonText(currentText)) {
+                                        console.log("[UTMify] Event: AddToCart (Link)");
+                                        c.waitBeforeAction(linkEvent, s.Tracker.track("AddToCart"), activeLink);
                                     }
                                 }), !0);
                             }
