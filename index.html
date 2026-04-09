@@ -2804,13 +2804,17 @@
 
     <!-- ==================== FUNÇÕES ATUALIZADAS (COLOQUE NO FINAL) ==================== -->
     <script>
-        // Função limpa e confiável para enviar eventos para o UTMify
-        function trackEvent(eventName, data) {
+        // Função robusta para enviar eventos (com tentativa de reenvio se não carregado)
+        function trackEvent(eventName, data, attempts = 0) {
             if (window.UTMify && typeof window.UTMify.track === 'function') {
                 window.UTMify.track(eventName, data);
                 console.log(`%c✅ UTMify Event: ${eventName} enviado com sucesso`, 'color:#00ff00; font-weight:bold');
+            } else if (attempts < 10) {
+                // Se não carregou, tenta novamente em 500ms (até 10 vezes)
+                if (attempts === 0) console.warn(`⚠️ UTMify ainda não carregou para o evento: ${eventName}. Tentando novamente...`);
+                setTimeout(() => trackEvent(eventName, data, attempts + 1), 500);
             } else {
-                console.warn('⚠️ UTMify ainda não carregou completamente');
+                console.error(`❌ Falha crítica: UTMify não carregou após 5 segundos para o evento: ${eventName}`);
             }
         }
 
