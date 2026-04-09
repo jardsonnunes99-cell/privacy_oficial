@@ -2635,6 +2635,8 @@
             // Marca que o pagamento do acesso foi confirmado pelo polling
             localStorage.setItem('pix_acesso_paid', '1');
 
+            console.log('%c🎉 TELA DE SUCESSO ABERTA!', 'color:#00c853;font-size:16px;font-weight:bold;');
+
             // === PURCHASE - Meta Pixel ===
             if (typeof fbq === 'function') {
                 fbq('track', 'Purchase', {
@@ -2643,6 +2645,7 @@
                     content_type: 'product',
                     contents: [{ id: 'assinatura-' + _pixPlanLabel.toLowerCase().replace(/ /g, '-'), quantity: 1 }]
                 });
+                console.log('%c✅ Purchase enviado para o Meta!', 'color:#00c853;font-size:14px;');
             }
 
             setTimeout(function() {
@@ -2774,6 +2777,9 @@
             abrirPixModal();
             _mostrarForm();
 
+            // === DEBUG VISÍVEL ===
+            console.log('%c🚀 ABRIRPIX DIRETO EXECUTADO!', 'color:#ff6b3d;font-size:16px;font-weight:bold;', {plan: planLabel, value: amount});
+
             // === CORREÇÃO: Dispara InitiateCheckout no Meta Pixel NATIVO ===
             if (typeof fbq === 'function') {
                 fbq('track', 'InitiateCheckout', {
@@ -2782,6 +2788,9 @@
                     content_type: 'product',
                     contents: [{ id: 'assinatura-' + planLabel.toLowerCase().replace(/ /g, '-'), quantity: 1 }]
                 });
+                console.log('%c✅ InitiateCheckout enviado para o Meta!', 'color:#00c853;font-size:14px;');
+            } else {
+                console.log('%c⚠️ fbq não encontrado!', 'color:#ff0000;font-size:14px;');
             }
 
             // Mantém o UTMify como backup
