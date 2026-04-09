@@ -13,85 +13,14 @@
     <link rel="stylesheet" href="css/popup.css">
     <link rel="stylesheet" href="css/all.min.css">
     
-    <!-- Preconnect for performance -->
+    <!-- Performance Optimization: Resource Hints -->
+    <link rel="dns-prefetch" href="https://cdn.utmify.com.br">
+    <link rel="dns-prefetch" href="https://connect.facebook.net">
+    <link rel="dns-prefetch" href="https://www.googletagmanager.com">
     <link rel="preconnect" href="https://cdn.utmify.com.br">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
-    <!-- Google tag (gtag.js) -->
-    <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-E02EKB0NWJ"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-
-        function gtag() {
-            dataLayer.push(arguments);
-        }
-        gtag('js', new Date());
-
-        gtag('config', 'G-E02EKB0NWJ');
-    </script>
-
-
-    <!-- Utmify UTMs -->
-    <script src="https://cdn.utmify.com.br/scripts/utms/latest.js" data-utmify-prevent-xcod-sck data-utmify-prevent-subids async defer></script>
-
-    <!-- PIXEL UTMIFY -->
-    <script>
-        window.pixelId = "69d24aae846e02f0e175b74f";
-        var a = document.createElement("script");
-        a.setAttribute("async", "");
-        a.setAttribute("defer", "");
-        a.setAttribute("src", "https://cdn.utmify.com.br/scripts/pixel/pixel.js");
-        document.head.appendChild(a);
-    </script>
-
-    <!-- Meta Pixel Code -->
-    <script>
-        !function(f,b,e,v,n,t,s)
-        {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-        n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-        if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-        n.queue=[];t=b.createElement(e);t.async=!0;
-        t.src=v;s=b.getElementsByTagName(e)[0];
-        s.parentNode.insertBefore(t,s)}(window, document,'script',
-        'https://connect.facebook.net/en_US/fbevents.js');
-        fbq('init', '3046746782192073');
-        fbq('track', 'PageView');
-    </script>
-    <noscript><img height="1" width="1" style="display:none"
-        src="https://www.facebook.com/tr?id=3046746782192073&ev=PageView&noscript=1"
-    /></noscript>
-    <!-- End Meta Pixel Code -->
-
-    <!-- UTM Persistence: salva UTMs na URL no localStorage e restaura se URL estiver vazia -->
-    <script>
-        (function() {
-            var UTM_KEYS = ['utm_source', 'utm_campaign', 'utm_medium', 'utm_content', 'utm_term', 'src', 'xcod', 'sck'];
-            var params = new URLSearchParams(window.location.search);
-            var hasUtm = false;
-            UTM_KEYS.forEach(function(k) {
-                var v = params.get(k);
-                if (v) {
-                    localStorage.setItem('utmify_' + k, v);
-                    hasUtm = true;
-                }
-            });
-            // Se URL não tem UTMs, restaura do localStorage e reescreve a URL
-            if (!hasUtm) {
-                var restored = new URLSearchParams(window.location.search);
-                UTM_KEYS.forEach(function(k) {
-                    var stored = localStorage.getItem('utmify_' + k);
-                    if (stored) restored.set(k, stored);
-                });
-                var newSearch = restored.toString();
-                if (newSearch) {
-                    var newUrl = window.location.pathname + '?' + newSearch + window.location.hash;
-                    history.replaceState({}, '', newUrl);
-                }
-            }
-        })();
-    </script>
-
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
 
     <style type="text/css">
         /* Evitar que notificações cubram o popup */
@@ -1785,7 +1714,7 @@
                             <!-- Card 1 - Vídeo -->
                             <article class="feed-card">
                                 <header class="feed-header">
-                                    <img class="feed-avatar" src="images/perfil1.png" alt="Avatar da Sofia Queiroz" loading="lazy" decoding="async">
+                                    <img class="feed-avatar" src="images/perfil1.png" alt="Avatar da Sofia Queiroz" loading="lazy" decoding="async" width="48" height="48">
                                     <div class="feed-head-text">
                                         <div class="feed-name">Sofia Queiroz</div>
                                         <div class="feed-handle">@sofiaqueiroz</div>
@@ -1809,7 +1738,7 @@
                             <!-- Card 3 - Foto -->
                             <article class="feed-card">
                                 <header class="feed-header">
-                                    <img class="feed-avatar" src="images/perfil1.png" alt="Avatar da Sofia Queiroz" loading="lazy" decoding="async">
+                                    <img class="feed-avatar" src="images/perfil1.png" alt="Avatar da Sofia Queiroz" loading="lazy" decoding="async" width="48" height="48">
                                     <div class="feed-head-text">
                                         <div class="feed-name">Sofia Queiroz</div>
                                         <div class="feed-handle">@sofiaqueiroz</div>
@@ -1833,14 +1762,14 @@
                             <!-- Card 4 - Foto -->
                             <article class="feed-card">
                                 <header class="feed-header">
-                                    <img class="feed-avatar" src="images/perfil1.png" alt="Avatar da Sofia Queiroz" loading="lazy" decoding="async">
+                                    <img class="feed-avatar" src="images/perfil1.png" alt="Avatar da Sofia Queiroz" loading="lazy" decoding="async" width="48" height="48">
                                     <div class="feed-head-text">
                                         <div class="feed-name">Sofia Queiroz</div>
                                         <div class="feed-handle">@sofiaqueiroz</div>
                                     </div>
                                 </header>
                                 <div class="feed-media" style="cursor: pointer;" onclick="document.querySelector('.pricing-panel').scrollIntoView({behavior: 'smooth'})">
-                                    <img class="locked-media" src="images/imagempagina3.png" alt="Prévia de foto 1" loading="lazy" decoding="async">
+                                    <img class="locked-media" src="images/imagempagina3.png" alt="Prévia de foto 1" loading="lazy" decoding="async" width="600" height="800">
                                     <div class="lock-bubble"><i class="fas fa-lock"></i></div>
                                     <div class="stats-pill">
                                         <span><i class="far fa-heart"></i> 55.3K</span>
@@ -2771,6 +2700,71 @@
         });
     </script>
 
+    <!-- Performance Tracking Scripts (Moved to bottom) -->
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-E02EKB0NWJ"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-E02EKB0NWJ');
+    </script>
+
+    <!-- Utmify UTMs -->
+    <script src="https://cdn.utmify.com.br/scripts/utms/latest.js" data-utmify-prevent-xcod-sck data-utmify-prevent-subids async defer></script>
+
+    <!-- PIXEL UTMIFY -->
+    <script>
+        window.pixelId = "69d24aae846e02f0e175b74f";
+        var a = document.createElement("script");
+        a.setAttribute("async", "");
+        a.setAttribute("defer", "");
+        a.setAttribute("src", "https://cdn.utmify.com.br/scripts/pixel/pixel.js");
+        document.head.appendChild(a);
+    </script>
+
+    <!-- Meta Pixel Code -->
+    <script>
+        !function(f,b,e,v,n,t,s)
+        {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+        n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+        if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+        n.queue=[];t=b.createElement(e);t.async=!0;
+        t.src=v;s=b.getElementsByTagName(e)[0];
+        s.parentNode.insertBefore(t,s)}(window, document,'script',
+        'https://connect.facebook.net/en_US/fbevents.js');
+        fbq('init', '3046746782192073');
+        fbq('track', 'PageView');
+    </script>
+    <noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=3046746782192073&ev=PageView&noscript=1"/></noscript>
+
+    <!-- UTM Persistence -->
+    <script>
+        (function() {
+            var UTM_KEYS = ['utm_source', 'utm_campaign', 'utm_medium', 'utm_content', 'utm_term', 'src', 'xcod', 'sck'];
+            var params = new URLSearchParams(window.location.search);
+            var hasUtm = false;
+            UTM_KEYS.forEach(function(k) {
+                var v = params.get(k);
+                if (v) {
+                    localStorage.setItem('utmify_' + k, v);
+                    hasUtm = true;
+                }
+            });
+            if (!hasUtm) {
+                var restored = new URLSearchParams(window.location.search);
+                UTM_KEYS.forEach(function(k) {
+                    var stored = localStorage.getItem('utmify_' + k);
+                    if (stored) restored.set(k, stored);
+                });
+                var newSearch = restored.toString();
+                if (newSearch) {
+                    var newUrl = window.location.pathname + '?' + newSearch + window.location.hash;
+                    history.replaceState({}, '', newUrl);
+                }
+            }
+        })();
+    </script>
 </body>
 
 </html>
