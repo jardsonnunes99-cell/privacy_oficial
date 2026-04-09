@@ -2650,8 +2650,8 @@
             }
 
             // === PURCHASE - UTMify (Server-Side) ===
-            if (typeof s !== 'undefined' && s.Tracker) {
-                s.Tracker.track('Purchase', {
+            if (window.Tracker && window.Tracker.track) {
+                window.Tracker.track('Purchase', {
                     value: _pixAmount,
                     currency: 'BRL',
                     content_name: _pixPlanLabel
@@ -2804,8 +2804,8 @@
             }
 
             // Envio para o UTMify (Servidor)
-            if (typeof s !== 'undefined' && s.Tracker) {
-                s.Tracker.track('InitiateCheckout', {
+            if (window.Tracker && window.Tracker.track) {
+                window.Tracker.track('InitiateCheckout', {
                     value: amount,
                     currency: 'BRL',
                     content_name: planLabel

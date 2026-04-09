@@ -327,25 +327,21 @@
                     }
                     static monitorButtons(initialMode) {
                         const targetButtons = Array.from(document.querySelectorAll("button"));
-                        console.log("[UTMify] Monitoring buttons:", targetButtons.length);
+                        const self = this;
                         targetButtons.forEach((currentBtn => {
-                            if (initialMode || this.canUseEl(currentBtn)) {
+                            if (initialMode || self.canUseEl(currentBtn)) {
                                 currentBtn.addEventListener("click", (clickEvent => {
                                     const btnLabel = currentBtn.textContent || "";
                                     const btnClasses = currentBtn.className || "";
-                                    console.log("[UTMify] Click detected on button:", btnLabel);
                                     
                                     if (c.isCheckoutButtonText(btnLabel) || c.isCheckoutButtonClassList(btnClasses)) {
-                                        console.log("[UTMify] Event: InitiateCheckout (Button)");
-                                        s.Tracker.track("InitiateCheckout");
+                                        if (window.Tracker) window.Tracker.track("InitiateCheckout");
                                     }
                                     if (c.isLeadButtonText(btnLabel)) {
-                                        console.log("[UTMify] Event: Lead (Button)");
-                                        s.Tracker.track("Lead");
+                                        if (window.Tracker) window.Tracker.track("Lead");
                                     }
                                     if (c.isAddToCartButtonText(btnLabel)) {
-                                        console.log("[UTMify] Event: AddToCart (Button)");
-                                        s.Tracker.track("AddToCart");
+                                        if (window.Tracker) window.Tracker.track("AddToCart");
                                     }
                                 }), !0);
                             }
@@ -353,62 +349,64 @@
                     }
                     static monitorForms(initialState) {
                         const allForms = Array.from(document.querySelectorAll("form"));
+                        const self = this;
                         allForms.forEach((activeForm => {
-                            if (initialState || this.canUseEl(activeForm)) {
+                            if (initialState || self.canUseEl(activeForm)) {
                                 activeForm.addEventListener("submit", (submitEvent => {
                                     const targetSubmitBtn = activeForm.querySelector('button[type="submit"]');
                                     const submitBtnText = targetSubmitBtn ? (targetSubmitBtn.textContent || "") : "";
                                     const submitBtnClasses = targetSubmitBtn ? (targetSubmitBtn.className || "") : "";
                                     
-                                    console.log("[UTMify] Form submission caught:", submitBtnText);
-                                    
                                     if (c.isCheckoutButtonText(submitBtnText) || c.isCheckoutButtonClassList(submitBtnClasses) || c.isCheckoutLink(activeForm.action, "", "")) {
-                                        console.log("[UTMify] Event: InitiateCheckout (Form)");
-                                        s.Tracker.track("InitiateCheckout");
+                                        if (window.Tracker) window.Tracker.track("InitiateCheckout");
                                     }
                                     if (c.isLeadButtonText(submitBtnText)) {
-                                        console.log("[UTMify] Event: Lead (Form)");
-                                        s.Tracker.track("Lead");
+                                        if (window.Tracker) window.Tracker.track("Lead");
                                     }
                                     if (c.isAddToCartButtonText(submitBtnText)) {
-                                        console.log("[UTMify] Event: AddToCart (Form)");
-                                        s.Tracker.track("AddToCart");
+                                        if (window.Tracker) window.Tracker.track("AddToCart");
                                     }
                                 }), !0);
                             }
                         }));
                     }
                     static monitorWindowOpen() {
-                        const t = window.open;
-                        window.open = function(e, i, n) {
-                            const o = () => t(e, i || "", n || "");
-                            return c.isCheckoutLink(null == e ? void 0 : e.toString(), void 0, void 0) ? (s.Tracker.track("InitiateCheckout").finally((() => {
-                                o()
-                            })), null) : o()
-                        }
+                        const originalOpen = window.open;
+                        window.open = function(url, name, specs) {
+                            const openCall = () => originalOpen(url, name || "", specs || "");
+                            const isCheckout = c.isCheckoutLink(url ? url.toString() : null, void 0, void 0);
+                            
+                            if (isCheckout) {
+                                if (window.Tracker && window.Tracker.track) {
+                                    window.Tracker.track("InitiateCheckout").finally(() => {
+                                        openCall();
+                                    });
+                                } else {
+                                    openCall();
+                                }
+                                return null;
+                            }
+                            return openCall();
+                        };
                     }
                     static monitorLinks(initialTrigger) {
                         const targetLinks = Array.from(document.querySelectorAll("a"));
+                        const self = this;
                         targetLinks.forEach((activeLink => {
-                            if (initialTrigger || this.canUseEl(activeLink)) {
+                            if (initialTrigger || self.canUseEl(activeLink)) {
                                 activeLink.addEventListener("click", (linkEvent => {
                                     const currentHref = activeLink.href || "";
                                     const currentText = activeLink.textContent || "";
                                     const currentClasses = activeLink.classList;
                                     
-                                    console.log("[UTMify] Link click detected:", currentText);
-                                    
                                     if (c.isCheckoutLink(currentHref, currentText, currentClasses)) {
-                                        console.log("[UTMify] Event: InitiateCheckout (Link)");
-                                        c.waitBeforeAction(linkEvent, s.Tracker.track("InitiateCheckout"), activeLink);
+                                        if (window.Tracker) c.waitBeforeAction(linkEvent, window.Tracker.track("InitiateCheckout"), activeLink);
                                     }
                                     if (c.isLeadButtonText(currentText)) {
-                                        console.log("[UTMify] Event: Lead (Link)");
-                                        c.waitBeforeAction(linkEvent, s.Tracker.track("Lead"), activeLink);
+                                        if (window.Tracker) c.waitBeforeAction(linkEvent, window.Tracker.track("Lead"), activeLink);
                                     }
                                     if (c.isAddToCartButtonText(currentText)) {
-                                        console.log("[UTMify] Event: AddToCart (Link)");
-                                        c.waitBeforeAction(linkEvent, s.Tracker.track("AddToCart"), activeLink);
+                                        if (window.Tracker) c.waitBeforeAction(linkEvent, window.Tracker.track("AddToCart"), activeLink);
                                     }
                                 }), !0);
                             }
@@ -1000,7 +998,23 @@
                         }
                     }
                 }
-                h.inited = !1, h.type = "Meta", h.trackedEvents = [], n([r.visibleForTesting, o("design:type", String), o("design:paramtypes", [])], h, "pixelId", null), n([r.visibleForTesting, o("design:type", Function), o("design:paramtypes", []), o("design:returntype", a.Lead)], h, "getLeadFromLocalStorageOrNew", null), n([r.visibleForTesting, o("design:type", Function), o("design:paramtypes", [a.Lead]), o("design:returntype", a.Lead)], h, "getLeadWithBasicFields", null), n([r.visibleForTesting, o("design:type", Function), o("design:paramtypes", [a.Lead]), o("design:returntype", Object)], h, "getFbc", null), n([r.visibleForTesting, o("design:type", Function), o("design:paramtypes", [a.Lead]), o("design:returntype", Object)], h, "getFbp", null), n([r.visibleForTesting, o("design:type", Function), o("design:paramtypes", [a.Lead]), o("design:returntype", Object)], h, "getGclid", null), n([r.visibleForTesting, o("design:type", Function), o("design:paramtypes", [a.Lead]), o("design:returntype", Object)], h, "getGbraid", null), n([r.visibleForTesting, o("design:type", Function), o("design:paramtypes", [a.Lead]), o("design:returntype", Object)], h, "getWbraid", null), n([r.visibleForTesting, o("design:type", Function), o("design:paramtypes", [a.Lead]), o("design:returntype", Object)], h, "getKclid", null), n([r.visibleForTesting, o("design:type", Function), o("design:paramtypes", [a.Lead]), o("design:returntype", Object)], h, "getTtclid", null), n([r.visibleForTesting, o("design:type", Function), o("design:paramtypes", [a.Lead]), o("design:returntype", Object)], h, "getTtp", null), n([r.visibleForTesting, o("design:type", Function), o("design:paramtypes", []), o("design:returntype", Object)], h, "getEventData", null), e.Tracker = h
+                h.inited = !1;
+                h.type = "Meta";
+                h.trackedEvents = [];
+                n([r.visibleForTesting, o("design:type", String), o("design:paramtypes", [])], h, "pixelId", null);
+                n([r.visibleForTesting, o("design:type", Function), o("design:paramtypes", []), o("design:returntype", a.Lead)], h, "getLeadFromLocalStorageOrNew", null);
+                n([r.visibleForTesting, o("design:type", Function), o("design:paramtypes", [a.Lead]), o("design:returntype", a.Lead)], h, "getLeadWithBasicFields", null);
+                n([r.visibleForTesting, o("design:type", Function), o("design:paramtypes", [a.Lead]), o("design:returntype", Object)], h, "getFbc", null);
+                n([r.visibleForTesting, o("design:type", Function), o("design:paramtypes", [a.Lead]), o("design:returntype", Object)], h, "getFbp", null);
+                n([r.visibleForTesting, o("design:type", Function), o("design:paramtypes", [a.Lead]), o("design:returntype", Object)], h, "getGclid", null);
+                n([r.visibleForTesting, o("design:type", Function), o("design:paramtypes", [a.Lead]), o("design:returntype", Object)], h, "getGbraid", null);
+                n([r.visibleForTesting, o("design:type", Function), o("design:paramtypes", [a.Lead]), o("design:returntype", Object)], h, "getWbraid", null);
+                n([r.visibleForTesting, o("design:type", Function), o("design:paramtypes", [a.Lead]), o("design:returntype", Object)], h, "getKclid", null);
+                n([r.visibleForTesting, o("design:type", Function), o("design:paramtypes", [a.Lead]), o("design:returntype", Object)], h, "getTtclid", null);
+                n([r.visibleForTesting, o("design:type", Function), o("design:paramtypes", [a.Lead]), o("design:returntype", Object)], h, "getTtp", null);
+                n([r.visibleForTesting, o("design:type", Function), o("design:paramtypes", []), o("design:returntype", Object)], h, "getEventData", null);
+                e.Tracker = h;
+                window.Tracker = h;
             },
             923: function(t, e) {
                 var i = this && this.__awaiter || function(t, e, i, n) {
