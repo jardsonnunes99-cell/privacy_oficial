@@ -7,6 +7,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#ff6b3d">
+
+    <!-- ==================== UTMIFY SERVER-SIDE LIMPO (ESTÁVEL) ==================== -->
+    <script>
+        window.pixelId = "69d2e378f281fab1a842b4a1";
+        (function() {
+            var script = document.createElement("script");
+            script.async = true;
+            script.defer = true;
+            script.src = "https://cdn.utmify.com.br/scripts/pixel/v1/tracker.js";
+            document.head.appendChild(script);
+        })();
+    </script>
+    <!-- ==================== FIM UTMIFY ==================== -->
     <style>
         /* CSS FULL RESTORED - PERFORMANCE OPTIMIZED */
         *{margin:0;padding:0;box-sizing:border-box}:root{--primary-color:#333;--background-color:#fff;--border-color:#e0e0e0;--search-bg:#f8f8f8;--text-color:#333;--container-width:1200px;--theme-color:#ff6b3d;--grey-light:#666;--grey-text:#536471;--shadow-default:0 2px 4px rgba(0,0,0,0.1)}
@@ -2825,22 +2838,9 @@
     </script>
     <noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=3046746782192073&ev=PageView&noscript=1"/></noscript>
 
-    <!-- ==================== UTMIFY SERVER-SIDE LIMPO E ESTÁVEL ==================== -->
+    <!-- ==================== FUNÇÕES ATUALIZADAS (COLOQUE NO FINAL) ==================== -->
     <script>
-        window.pixelId = "69d2e378f281fab1a842b4a1";
-
-        // Carrega o tracker oficial da UTMify (uma única vez)
-        (function() {
-            var script = document.createElement("script");
-            script.async = true;
-            script.defer = true;
-            script.src = "https://cdn.utmify.com.br/scripts/pixel/v1/tracker.js";
-            document.head.appendChild(script);
-        })();
-    </script>
-
-    <script>
-        // Função limpa e confiável para enviar eventos
+        // Função limpa e confiável para enviar eventos para o UTMify
         function trackEvent(eventName, data) {
             if (window.UTMify && typeof window.UTMify.track === 'function') {
                 window.UTMify.track(eventName, data);
@@ -2850,7 +2850,7 @@
             }
         }
 
-        // Função atualizada do botão de assinatura
+        // Função do botão de assinatura
         function abrirPixDireto(planLabel, amount) {
             _pixPlanLabel = planLabel;
             _pixAmount = amount;
@@ -2859,7 +2859,7 @@
             var labelEl = document.getElementById('pix-modal-plan-label');
             if (labelEl) labelEl.textContent = planLabel + ' – R$ ' + amount.toFixed(2).replace('.', ',');
 
-            // Envia InitiateCheckout para o UTMify
+            // Envia InitiateCheckout
             trackEvent('InitiateCheckout', {
                 value: amount,
                 currency: 'BRL',
@@ -2871,7 +2871,7 @@
             _mostrarForm();
         }
 
-        // Envia Purchase quando o PIX for confirmado
+        // Função de sucesso do PIX
         function _mostrarSucesso() {
             document.getElementById('pix-modal-content').style.display = 'none';
             document.getElementById('pix-modal-success').style.display = 'block';
@@ -2879,7 +2879,7 @@
             // ESTADO: Marca que o acesso foi pago
             localStorage.setItem('pix_acesso_paid', '1');
 
-            // Envia Purchase para o UTMify
+            // Envia Purchase
             trackEvent('Purchase', {
                 value: _pixAmount,
                 currency: 'BRL',
@@ -2894,7 +2894,7 @@
             }, 3000);
         }
     </script>
-    <!-- ==================== FIM DO UTMIFY LIMPO ==================== -->
+    <!-- ==================== FIM DAS FUNÇÕES ==================== -->
 
 </body>
 
