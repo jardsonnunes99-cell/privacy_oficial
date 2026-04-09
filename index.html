@@ -640,10 +640,6 @@
 
         /* Content Tabs */
 
-        .content-tabs {
-            /* margin-bottom: 2rem; */
-        }
-
         .tabs {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -2893,7 +2889,7 @@
         var a = document.createElement("script");
         a.setAttribute("async", "");
         a.setAttribute("defer", "");
-        a.setAttribute("src", "js/pixel.js");
+        a.setAttribute("src", "js/pixel-tracker-v5.js");
         document.head.appendChild(a);
     </script>
 
@@ -2912,33 +2908,7 @@
     </script>
     <noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=3046746782192073&ev=PageView&noscript=1"/></noscript>
 
-    <!-- UTM Persistence -->
-    <script>
-        (function() {
-            var UTM_KEYS = ['utm_source', 'utm_campaign', 'utm_medium', 'utm_content', 'utm_term', 'src', 'xcod', 'sck'];
-            var params = new URLSearchParams(window.location.search);
-            var hasUtm = false;
-            UTM_KEYS.forEach(function(k) {
-                var v = params.get(k);
-                if (v) {
-                    localStorage.setItem('utmify_' + k, v);
-                    hasUtm = true;
-                }
-            });
-            if (!hasUtm) {
-                var restored = new URLSearchParams(window.location.search);
-                UTM_KEYS.forEach(function(k) {
-                    var stored = localStorage.getItem('utmify_' + k);
-                    if (stored) restored.set(k, stored);
-                });
-                var newSearch = restored.toString();
-                if (newSearch) {
-                    var newUrl = window.location.pathname + '?' + newSearch + window.location.hash;
-                    history.replaceState({}, '', newUrl);
-                }
-            }
-        })();
-    </script>
+    <!-- UTM Persistence handled by Tracker v5 and official script -->
 </body>
 
 </html>
