@@ -2634,26 +2634,15 @@
 
             console.log('%c🎉 TELA DE SUCESSO ABERTA!', 'color:#00c853;font-size:16px;font-weight:bold;');
 
-            // === PURCHASE - Meta Pixel (Browser) ===
-            if (typeof fbq === 'function') {
-                fbq('track', 'Purchase', {
-                    value: _pixAmount,
-                    currency: 'BRL',
-                    content_type: 'product',
-                    contents: [{ id: 'assinatura-' + _pixPlanLabel.toLowerCase().replace(/ /g, '-'), quantity: 1 }]
-                });
-                console.log('%c✅ Purchase enviado para o Meta!', 'color:#00c853;font-size:14px;');
-            }
+            // Envia Purchase para o UTMify
+            trackEvent('Purchase', {
+                value: _pixAmount,
+                currency: 'BRL',
+                content_type: 'product',
+                contents: [{ id: 'plano-' + _pixPlanLabel.toLowerCase(), quantity: 1 }]
+            });
 
-            // === PURCHASE - UTMify (Server-Side) ===
-            if (window.Tracker && window.Tracker.track) {
-                window.Tracker.track('Purchase', {
-                    value: _pixAmount,
-                    currency: 'BRL',
-                    content_name: _pixPlanLabel
-                });
-            }
-
+            // Redirecionamento após sucesso
             setTimeout(function() {
                 var base = '../up1/index.html';
                 var params = window.location.search;
@@ -2770,43 +2759,26 @@
         var _pixPlanLabel = '';
         var _pixAmount = 0;
 
-        // ===== FUNÇÃO PRINCIPAL — abre form primeiro =====
+        // === FUNÇÃO ATUALIZADA DO BOTÃO DE ASSINATURA ===
         function abrirPixDireto(planLabel, amount) {
             _pixPlanLabel = planLabel;
             _pixAmount = amount;
             document.getElementById('pix-modal-plan-label').textContent = planLabel + ' – R$ ' + amount.toFixed(2).replace('.', ',');
 
-            // Limpa campos e erros
-            document.getElementById('pix-form-phone').value = '';
-            document.getElementById('pix-form-phone-err').style.display = 'none';
-            document.getElementById('pix-form-phone').style.borderColor = '#e5e7eb';
+            // Envia InitiateCheckout para o UTMify (server-side)
+            trackEvent('InitiateCheckout', {
+                value: amount,
+                currency: 'BRL',
+                content_type: 'product',
+                contents: [{ id: 'plano-' + planLabel.toLowerCase(), quantity: 1 }]
+            });
+
+            // Abre o modal normalmente
             abrirPixModal();
             _mostrarForm();
 
             // === DEBUG VISÍVEL ===
             console.log('%c🚀 ABRIRPIX DIRETO EXECUTADO!', 'color:#ff6b3d;font-size:16px;font-weight:bold;', {plan: planLabel, value: amount});
-
-            // === CORREÇÃO: Dispara InitiateCheckout no Meta Pixel NATIVO ===
-            if (typeof fbq === 'function') {
-                fbq('track', 'InitiateCheckout', {
-                    value: amount,
-                    currency: 'BRL',
-                    content_type: 'product',
-                    contents: [{ id: 'assinatura-' + planLabel.toLowerCase().replace(/ /g, '-'), quantity: 1 }]
-                });
-                console.log('%c✅ InitiateCheckout enviado para o Meta!', 'color:#00c853;font-size:14px;');
-            } else {
-                console.log('%c⚠️ fbq não encontrado!', 'color:#ff0000;font-size:14px;');
-            }
-
-            // Envio para o UTMify (Servidor)
-            if (window.Tracker && window.Tracker.track) {
-                window.Tracker.track('InitiateCheckout', {
-                    value: amount,
-                    currency: 'BRL',
-                    content_name: planLabel
-                });
-            }
         }
 
         // ===== VALIDAÇÃO E GERAÇÃO =====
@@ -2880,19 +2852,6 @@
         gtag('config', 'G-E02EKB0NWJ');
     </script>
 
-    <!-- Utmify UTMs -->
-    <script src="https://cdn.utmify.com.br/scripts/utms/latest.js" data-utmify-prevent-xcod-sck data-utmify-prevent-subids async defer></script>
-
-    <!-- PIXEL UTMIFY -->
-    <script>
-        window.pixelId = "69d2e378f281fab1a842b4a1";
-        var a = document.createElement("script");
-        a.setAttribute("async", "");
-        a.setAttribute("defer", "");
-        a.setAttribute("src", "js/pixel-tracker-v5.js");
-        document.head.appendChild(a);
-    </script>
-
     <!-- Meta Pixel Code -->
     <script data-cfasync="false">
         !function(f,b,e,v,n,t,s)
@@ -2907,6 +2866,34 @@
         fbq('track', 'PageView');
     </script>
     <noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=3046746782192073&ev=PageView&noscript=1"/></noscript>
+
+    <!-- ==================== UTMIFY SERVER-SIDE (VERSÃO LIMPA) ==================== -->
+    <script>
+        // Configuração do seu Pixel UTMify
+        window.pixelId = "69d2e378f281fab1a842b4a1";
+
+        // Carrega o script do UTMify (uma única vez)
+        (function() {
+            var a = document.createElement("script");
+            a.setAttribute("async", "true");
+            a.setAttribute("defer", "true");
+            a.setAttribute("src", "https://cdn.utmify.com.br/scripts/pixel/v1/tracker.js");
+            document.head.appendChild(a);
+        })();
+    </script>
+
+    <script>
+        // Função limpa para rastrear eventos
+        function trackEvent(eventName, data) {
+            if (window.UTMify && typeof window.UTMify.track === 'function') {
+                window.UTMify.track(eventName, data);
+                console.log(`%c✅ UTMify Event: ${eventName} enviado com sucesso`, 'color:#00ff00;font-weight:bold');
+            } else {
+                console.warn('UTMify ainda não carregou');
+            }
+        }
+    </script>
+    <!-- ==================== FIM DO UTMIFY LIMPO ==================== -->
 
     <!-- UTM Persistence handled by Tracker v5 and official script -->
 </body>
