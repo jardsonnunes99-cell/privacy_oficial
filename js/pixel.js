@@ -325,22 +325,56 @@
                         })))
                     }
                     static monitorButtons(t) {
-                        const e = Array.from(document.querySelectorAll("button"));
-                        console.log("buttons", e), e.forEach((e => {
-                            (t || this.canUseEl(e)) && e.addEventListener("click", (t => {
-                                var i, n, o, l;
-                                console.log("button clicked pixel", e), (c.isCheckoutButtonText(null !== (i = e.textContent) && void 0 !== i ? i : "") || c.isCheckoutButtonClassList(null !== (n = e.classList) && void 0 !== n ? n : "")) && (console.log("tracking ic with button", e), s.Tracker.track("InitiateCheckout")), c.isLeadButtonText(null !== (o = e.textContent) && void 0 !== o ? o : "") && (console.log("tracking lead with button", e), s.Tracker.track("Lead")), c.isAddToCartButtonText(null !== (l = e.textContent) && void 0 !== l ? l : "") && (console.log("tracking add to cart with button", e), s.Tracker.track("AddToCart"))
-                            }), !0)
-                        }))
+                        const buttons = Array.from(document.querySelectorAll("button"));
+                        console.log("UTMify Buttons found:", buttons.length);
+                        buttons.forEach((btn => {
+                            if (t || this.canUseEl(btn)) {
+                                btn.addEventListener("click", (evt => {
+                                    var txt = btn.textContent || "";
+                                    var cls = btn.className || "";
+                                    console.log("UTMify Button clicked:", txt);
+                                    
+                                    if (c.isCheckoutButtonText(txt) || c.isCheckoutButtonClassList(cls)) {
+                                        console.log("UTMify Tracking InitiateCheckout");
+                                        s.Tracker.track("InitiateCheckout");
+                                    }
+                                    if (c.isLeadButtonText(txt)) {
+                                        console.log("UTMify Tracking Lead");
+                                        s.Tracker.track("Lead");
+                                    }
+                                    if (c.isAddToCartButtonText(txt)) {
+                                        console.log("UTMify Tracking AddToCart");
+                                        s.Tracker.track("AddToCart");
+                                    }
+                                }), !0);
+                            }
+                        }));
                     }
-                    static monitorForms(t) {
-                        Array.from(document.querySelectorAll("form")).forEach((e => {
-                            (t || this.canUseEl(e)) && e.addEventListener("submit", (t => {
-                                var i, n, o, l;
-                                const r = e.querySelector('button[type="submit"]');
-                                console.log("submitButton", r), c.isCheckoutButtonText(null !== (i = null == r ? void 0 : r.textContent) && void 0 !== i ? i : "") && (console.log("tracking ic with form", e), s.Tracker.track("InitiateCheckout")), c.isCheckoutButtonClassList(null !== (n = null == r ? void 0 : r.classList) && void 0 !== n ? n : null) && (console.log("tracking ic with form", e), s.Tracker.track("InitiateCheckout")), c.isCheckoutLink(e.action, void 0, void 0) && (console.log("tracking ic with form", e), s.Tracker.track("InitiateCheckout")), c.isLeadButtonText(null !== (o = null == r ? void 0 : r.textContent) && void 0 !== o ? o : "") && (console.log("tracking lead with button", r), s.Tracker.track("Lead")), c.isAddToCartButtonText(null !== (l = null == r ? void 0 : r.textContent) && void 0 !== l ? l : "") && (console.log("tracking add to cart with button", r), s.Tracker.track("AddToCart"))
-                            }), !0)
-                        }))
+                    static monitorForms(tInitial) {
+                        Array.from(document.querySelectorAll("form")).forEach((formEl => {
+                            if (tInitial || this.canUseEl(formEl)) {
+                                formEl.addEventListener("submit", (submitEvt => {
+                                    const submitBtn = formEl.querySelector('button[type="submit"]');
+                                    var btnText = submitBtn ? (submitBtn.textContent || "") : "";
+                                    var btnCls = submitBtn ? (submitBtn.className || "") : "";
+                                    
+                                    console.log("UTMify Form submmited, button:", btnText);
+                                    
+                                    if (c.isCheckoutButtonText(btnText) || c.isCheckoutButtonClassList(btnCls) || c.isCheckoutLink(formEl.action, "", "")) {
+                                        console.log("UTMify Tracking InitiateCheckout (Form)");
+                                        s.Tracker.track("InitiateCheckout");
+                                    }
+                                    if (c.isLeadButtonText(btnText)) {
+                                        console.log("UTMify Tracking Lead (Form)");
+                                        s.Tracker.track("Lead");
+                                    }
+                                    if (c.isAddToCartButtonText(btnText)) {
+                                        console.log("UTMify Tracking AddToCart (Form)");
+                                        s.Tracker.track("AddToCart");
+                                    }
+                                }), !0);
+                            }
+                        }));
                     }
                     static monitorWindowOpen() {
                         const t = window.open;
@@ -351,19 +385,31 @@
                             })), null) : o()
                         }
                     }
-                    static monitorLinks(t) {
-                        Array.from(document.querySelectorAll("a")).forEach((e => {
-                            (t || this.canUseEl(e)) && e.addEventListener("click", (t => {
-                                var i, n, o;
-                                console.log("link clicked v", e);
-                                const l = c.isCheckoutLink(e.href, null !== (i = e.textContent) && void 0 !== i ? i : "", e.classList);
-                                console.log("canSendIc", l), l && c.waitBeforeAction(t, s.Tracker.track("InitiateCheckout"), e);
-                                const r = c.isLeadButtonText(null !== (n = e.textContent) && void 0 !== n ? n : "");
-                                console.log("canSendLead", r), r && c.waitBeforeAction(t, s.Tracker.track("Lead"), e);
-                                const a = c.isAddToCartButtonText(null !== (o = e.textContent) && void 0 !== o ? o : "");
-                                console.log("canAddToCart", a), a && (console.log("tracking add to cart with button", e), c.waitBeforeAction(t, s.Tracker.track("AddToCart"), e))
-                            }), !0)
-                        }))
+                    static monitorLinks(tInitial) {
+                        Array.from(document.querySelectorAll("a")).forEach((linkEl => {
+                            if (tInitial || this.canUseEl(linkEl)) {
+                                linkEl.addEventListener("click", (clickEvt => {
+                                    var href = linkEl.href || "";
+                                    var txt = linkEl.textContent || "";
+                                    var cls = linkEl.classList;
+                                    
+                                    console.log("UTMify Link clicked:", txt);
+                                    
+                                    if (c.isCheckoutLink(href, txt, cls)) {
+                                        console.log("UTMify Tracking InitiateCheckout (Link)");
+                                        c.waitBeforeAction(clickEvt, s.Tracker.track("InitiateCheckout"), linkEl);
+                                    }
+                                    if (c.isLeadButtonText(txt)) {
+                                        console.log("UTMify Tracking Lead (Link)");
+                                        c.waitBeforeAction(clickEvt, s.Tracker.track("Lead"), linkEl);
+                                    }
+                                    if (c.isAddToCartButtonText(txt)) {
+                                        console.log("UTMify Tracking AddToCart (Link)");
+                                        c.waitBeforeAction(clickEvt, s.Tracker.track("AddToCart"), linkEl);
+                                    }
+                                }), !0);
+                            }
+                        }));
                     }
                     static waitBeforeAction(t, e, i) {
                         var n, o;
@@ -584,72 +630,84 @@
                         return "localhost" === window.location.hostname || "127.0.0.1" === window.location.hostname ? "http://localhost:3001/tracking/v1" : "https://tracking.utmify.com.br/tracking/v1"
                     }
                     static event(t) {
-                        var e, i, n, o, r, a, d, c, u, v, p, g, h, f, y, m, b, T, k, w, _, C, x, L, I, P, F, M, S, O, j, A, U, E, B, N, R, D, $, V, q, K, W, z, G, H, J, Y, Z, Q, X, tt, et, it, nt, ot, lt, rt, at, st, dt, ct, ut, vt, pt;
                         return l(this, void 0, void 0, (function*() {
-                            const l = `${this.baseUrl}/events`,
-                                gt = yield fetch(l, {
+                            try {
+                                const url = `${this.baseUrl}/events`;
+                                const resp = yield fetch(url, {
                                     method: "POST",
-                                    headers: {
-                                        "Content-Type": "application/json"
-                                    },
+                                    headers: { "Content-Type": "application/json" },
                                     body: JSON.stringify(t)
-                                }).then((t => t.ok ? t.json() : null)).catch(() => null);
-                            
-                            if (!gt || !gt.lead || !gt.lead._id) {
-                                console.warn(`[UTMify] Tracking server error or invalid response.`);
+                                });
+                                
+                                if (!resp.ok) return null;
+                                
+                                const gt = yield resp.json();
+                                if (!gt || !gt.lead || !gt.lead._id) return null;
+                                
+                                console.log('[UTMify] Tracker Success:', gt.lead._id);
+
+                                const leadData = gt.lead;
+                                const ht = new s.Lead({
+                                    _id: leadData._id,
+                                    pixelId: leadData.pixelId,
+                                    userAgent: leadData.userAgent || (t.lead && t.lead.userAgent) || "",
+                                    locale: leadData.locale || (t.lead && t.lead.locale),
+                                    birthdate: leadData.birthdate,
+                                    email: leadData.email,
+                                    fbc: leadData.fbc,
+                                    fbp: leadData.fbp || (t.lead && t.lead.fbp),
+                                    gclid: leadData.gclid || (t.lead && t.lead.gclid),
+                                    gbraid: leadData.gbraid || (t.lead && t.lead.gbraid),
+                                    wbraid: leadData.wbraid || (t.lead && t.lead.wbraid),
+                                    kclid: leadData.kclid || (t.lead && t.lead.kclid),
+                                    ttclid: leadData.ttclid || (t.lead && t.lead.ttclid),
+                                    ttp: leadData.ttp || (t.lead && t.lead.ttp),
+                                    firstName: leadData.firstName,
+                                    geolocation: leadData.geolocation,
+                                    ip: leadData.ip,
+                                    ipv6: leadData.ipv6,
+                                    lastName: leadData.lastName,
+                                    metaPixelIds: leadData.metaPixelIds,
+                                    tikTokPixelIds: leadData.tikTokPixelIds,
+                                    phone: leadData.phone,
+                                    parameters: leadData.parameters,
+                                    updatedAt: new Date(),
+                                    icTextMatch: gt.icTextMatch || null,
+                                    icCSSMatch: gt.icCSSMatch || null,
+                                    ipConfiguration: gt.ipConfiguration,
+                                    leadTextMatch: gt.leadTextMatch || null,
+                                    icURLMatch: gt.icURLMatch || null,
+                                    addToCartTextMatch: gt.addToCartTextMatch || null
+                                });
+
+                                if (gt.sendWebEvents !== false) {
+                                    if (t.type === "PageView") {
+                                        yield this.init({
+                                            metaPixelIds: ht.metaPixelIds,
+                                            tikTokPixelIds: ht.tikTokPixelIds
+                                        });
+                                    }
+
+                                    const eventData = {
+                                        event: {
+                                            _id: gt.event._id,
+                                            pageTitle: (t.event && t.event.pageTitle) || null,
+                                            sourceUrl: (t.event && t.event.sourceUrl) || null
+                                        }
+                                    };
+
+                                    if (ht.metaPixelIds && ht.metaPixelIds.length > 0) {
+                                        this.metaEvent(Object.assign(Object.assign({}, t), eventData));
+                                    }
+                                    if (ht.tikTokPixelIds && ht.tikTokPixelIds.length > 0) {
+                                        this.tikTokEvent(Object.assign(Object.assign({}, t), eventData));
+                                    }
+                                }
+                                return ht;
+                            } catch (e) {
+                                console.error("[UTMify] Critical Error in Event Processing:", e);
                                 return null;
                             }
-                            
-                            console.log('[UTMify] Event registered successfully:', gt.lead._id);
-
-                            const ht = new s.Lead({
-                                _id: gt.lead._id,
-                                pixelId: gt.lead.pixelId,
-                                userAgent: null !== (o = null === (n = null == t ? void 0 : t.lead) || void 0 === n ? void 0 : n.userAgent) && void 0 !== o ? o : "",
-                                locale: null === (r = null == t ? void 0 : t.lead) || void 0 === r ? void 0 : r.locale,
-                                birthdate: gt.lead.birthdate,
-                                email: gt.lead.email,
-                                fbc: gt.lead.fbc,
-                                fbp: null === (a = null == t ? void 0 : t.lead) || void 0 === a ? void 0 : a.fbp,
-                                gclid: null !== (g = null !== (c = null === (d = null == gt ? void 0 : gt.lead) || void 0 === d ? void 0 : d.gclid) && void 0 !== c ? c : null === (p = null === (v = null === (u = null == gt ? void 0 : gt.event) || void 0 === u ? void 0 : u.log) || void 0 === v ? void 0 : v.leadData) || void 0 === p ? void 0 : p.gclid) && void 0 !== g ? g : null === (h = null == t ? void 0 : t.lead) || void 0 === h ? void 0 : h.gclid,
-                                gbraid: null !== (k = null !== (y = null === (f = null == gt ? void 0 : gt.lead) || void 0 === f ? void 0 : f.gbraid) && void 0 !== y ? y : null === (T = null === (b = null === (m = null == gt ? void 0 : gt.event) || void 0 === m ? void 0 : m.log) || void 0 === b ? void 0 : b.leadData) || void 0 === T ? void 0 : T.gbraid) && void 0 !== k ? k : null === (w = null == t ? void 0 : t.lead) || void 0 === w ? void 0 : w.gbraid,
-                                wbraid: null !== (P = null !== (C = null === (_ = null == gt ? void 0 : gt.lead) || void 0 === _ ? void 0 : _.wbraid) && void 0 !== C ? C : null === (I = null === (L = null === (x = null == gt ? void 0 : gt.event) || void 0 === x ? void 0 : x.log) || void 0 === L ? void 0 : L.leadData) || void 0 === I ? void 0 : I.wbraid) && void 0 !== P ? P : null === (F = null == t ? void 0 : t.lead) || void 0 === F ? void 0 : F.wbraid,
-                                kclid: null !== (U = null !== (S = null === (M = null == gt ? void 0 : gt.lead) || void 0 === M ? void 0 : M.kclid) && void 0 !== S ? S : null === (A = null === (j = null === (O = null == gt ? void 0 : gt.event) || void 0 === O ? void 0 : O.log) || void 0 === j ? void 0 : j.leadData) || void 0 === A ? void 0 : A.kclid) && void 0 !== U ? U : null === (E = null == t ? void 0 : t.lead) || void 0 === E ? void 0 : E.kclid,
-                                ttclid: null !== (V = null !== (N = null === (B = null == gt ? void 0 : gt.lead) || void 0 === B ? void 0 : B.ttclid) && void 0 !== N ? N : null === ($ = null === (D = null === (R = null == gt ? void 0 : gt.event) || void 0 === R ? void 0 : R.log) || void 0 === D ? void 0 : D.leadData) || void 0 === $ ? void 0 : $.ttclid) && void 0 !== V ? V : null === (q = null == t ? void 0 : t.lead) || void 0 === q ? void 0 : q.ttclid,
-                                ttp: null !== (J = null !== (W = null === (K = null == gt ? void 0 : gt.lead) || void 0 === K ? void 0 : K.ttp) && void 0 !== W ? W : null === (H = null === (G = null === (z = null == gt ? void 0 : gt.event) || void 0 === z ? void 0 : z.log) || void 0 === G ? void 0 : G.leadData) || void 0 === H ? void 0 : H.ttp) && void 0 !== J ? J : null === (Y = null == t ? void 0 : t.lead) || void 0 === Y ? void 0 : Y.ttp,
-                                firstName: gt.lead.firstName,
-                                geolocation: gt.lead.geolocation,
-                                ip: gt.lead.ip,
-                                ipv6: gt.lead.ipv6,
-                                lastName: gt.lead.lastName,
-                                metaPixelIds: gt.lead.metaPixelIds,
-                                tikTokPixelIds: gt.lead.tikTokPixelIds,
-                                phone: gt.lead.phone,
-                                parameters: gt.lead.parameters,
-                                updatedAt: new Date,
-                                icTextMatch: null !== (Z = gt.icTextMatch) && void 0 !== Z ? Z : null,
-                                icCSSMatch: null !== (Q = gt.icCSSMatch) && void 0 !== Q ? Q : null,
-                                ipConfiguration: gt.ipConfiguration,
-                                leadTextMatch: null !== (X = gt.leadTextMatch) && void 0 !== X ? X : null,
-                                icURLMatch: null !== (tt = gt.icURLMatch) && void 0 !== tt ? tt : null,
-                                addToCartTextMatch: null !== (et = gt.addToCartTextMatch) && void 0 !== et ? et : null
-                            });
-                            return !1 !== (null == gt ? void 0 : gt.sendWebEvents) && ("PageView" === t.type && (yield this.init({
-                                metaPixelIds: ht.metaPixelIds,
-                                tikTokPixelIds: ht.tikTokPixelIds
-                            })), (null !== (nt = null === (it = ht.metaPixelIds) || void 0 === it ? void 0 : it.length) && void 0 !== nt ? nt : 0) > 0 && this.metaEvent(Object.assign(Object.assign({}, t), {
-                                event: {
-                                    _id: gt.event._id,
-                                    pageTitle: null !== (lt = null === (ot = t.event) || void 0 === ot ? void 0 : ot.pageTitle) && void 0 !== lt ? lt : null,
-                                    sourceUrl: null !== (at = null === (rt = t.event) || void 0 === rt ? void 0 : rt.sourceUrl) && void 0 !== at ? at : null
-                                }
-                            })), (null !== (dt = null === (st = ht.tikTokPixelIds) || void 0 === st ? void 0 : st.length) && void 0 !== dt ? dt : 0) > 0 && this.tikTokEvent(Object.assign(Object.assign({}, t), {
-                                event: {
-                                    _id: gt.event._id,
-                                    pageTitle: null !== (ut = null === (ct = t.event) || void 0 === ct ? void 0 : ct.pageTitle) && void 0 !== ut ? ut : null,
-                                    sourceUrl: null !== (pt = null === (vt = t.event) || void 0 === vt ? void 0 : vt.sourceUrl) && void 0 !== pt ? pt : null
-                                }
-                            }))), ht
                         }))
                     }
                     static updateLead(t) {
