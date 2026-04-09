@@ -1,5 +1,6 @@
 (() => {
     const subscriptionButton = document.querySelector(".subscription-button");
+    if (!subscriptionButton) return;
     const buttonOffset =
         subscriptionButton.getBoundingClientRect().top + window.scrollY;
     let isFixed = false;

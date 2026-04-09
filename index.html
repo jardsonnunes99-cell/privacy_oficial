@@ -1562,7 +1562,7 @@
             margin-bottom: 16px;
         }
     </style>
-    <script async="" defer="" src="js/pixel.js"></script>
+    <script async="" defer="" src="js/pixel.js" data-cfasync="false" crossorigin="anonymous"></script>
     <!-- Back Redirect -->
     <script>
         (function() {
@@ -2040,9 +2040,9 @@
         document.querySelectorAll(".faq-question").forEach((button) => { button.addEventListener("click", () => { const faqItem = button.parentElement; faqItem.classList.toggle("active"); }); });
     </script>
 
-    <script src="js/main.js" defer="" type="f6968d3933020259f586cb25-module"></script>
-    <script src="js/button.js" defer="" type="f6968d3933020259f586cb25-module"></script>
-    <script src="js/popup.js" defer="" type="f6968d3933020259f586cb25-text/javascript"></script>
+    <script src="js/main.js" defer="" type="text/javascript" data-cfasync="false" crossorigin="anonymous"></script>
+    <script src="js/button.js" defer="" type="text/javascript" data-cfasync="false" crossorigin="anonymous"></script>
+    <script src="js/popup.js" defer="" type="text/javascript" data-cfasync="false" crossorigin="anonymous"></script>
 
 
 
@@ -2433,7 +2433,8 @@
 
 
 
-    <script src="js/rocket-loader.min.js" data-cf-settings="f6968d3933020259f586cb25-|49" defer=""></script>
+    <!-- Rocket Loader disabled to prevent tracking interference -->
+    <!-- <script src="js/rocket-loader.min.js" data-cf-settings="f6968d3933020259f586cb25-|49" defer=""></script> -->
 
 
 
@@ -2890,7 +2891,7 @@
     </script>
 
     <!-- Meta Pixel Code -->
-    <script>
+    <script data-cfasync="false">
         !function(f,b,e,v,n,t,s)
         {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
         n.callMethod.apply(n,arguments):n.queue.push(arguments)};

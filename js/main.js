@@ -140,10 +140,13 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // Event listener para o botão de bio
-    bioToggle.addEventListener("click", toggleBio);
+    if (bioToggle) {
+        bioToggle.addEventListener("click", toggleBio);
+    }
 
     // Controle da navbar durante o scroll
     window.addEventListener("scroll", () => {
+        if (!navbar) return;
         const currentScroll = window.pageYOffset;
 
         if (currentScroll > lastScroll && currentScroll > 100) {
