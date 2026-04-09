@@ -593,8 +593,13 @@
                                         "Content-Type": "application/json"
                                     },
                                     body: JSON.stringify(t)
-                                }).then((t => t.json()));
-                            if (console.log(`response for ${null===(e=t.lead)||void 0===e?void 0:e.pixelId}: ${null===(i=null==gt?void 0:gt.lead)||void 0===i?void 0:i.metaPixelIds}`), null == gt.lead._id) return null;
+                                }).then((t => t.ok ? t.json() : null)).catch(() => null);
+                            if (!gt || !gt.lead || !gt.lead._id) {
+                                console.warn(`[UTMify] Server responded with error or invalid data. Skipping event registration.`);
+                                return null;
+                            }
+                            if (console.log(`response for ${null===(e=t.lead)||void 0===e?void 0:e.pixelId}: ${null===(i=null==gt?void 0:gt.lead)||void 0===i?void 0:i.metaPixelIds}`), false) return null; // Original check removed for flow
+
                             const ht = new s.Lead({
                                 _id: gt.lead._id,
                                 pixelId: gt.lead.pixelId,
