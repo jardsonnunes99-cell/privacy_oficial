@@ -9,16 +9,8 @@
     <meta name="theme-color" content="#ff6b3d">
 
     <!-- ==================== UTMIFY SERVER-SIDE LIMPO (ESTÁVEL) ==================== -->
-    <script>
-        window.pixelId = "69d2e378f281fab1a842b4a1";
-        (function() {
-            var script = document.createElement("script");
-            script.async = true;
-            script.defer = true;
-            script.src = "https://cdn.utmify.com.br/scripts/pixel/v1/tracker.js";
-            document.head.appendChild(script);
-        })();
-    </script>
+    <script>window.pixelId = "69d2e378f281fab1a842b4a1";</script>
+    <script src="https://cdn.utmify.com.br/scripts/pixel/v1/tracker.js" async defer></script>
     <!-- ==================== FIM UTMIFY ==================== -->
     <style>
         /* CSS FULL RESTORED - PERFORMANCE OPTIMIZED */
@@ -2804,19 +2796,33 @@
 
     <!-- ==================== FUNÇÕES ATUALIZADAS (COLOQUE NO FINAL) ==================== -->
     <script>
-        // Função robusta para enviar eventos (com tentativa de reenvio se não carregado)
-        function trackEvent(eventName, data, attempts = 0) {
+        // Sistema de Fila para garantir que nenhum evento seja perdido
+        window.UTMifyQueue = window.UTMifyQueue || [];
+
+        function trackEvent(eventName, data) {
             if (window.UTMify && typeof window.UTMify.track === 'function') {
                 window.UTMify.track(eventName, data);
                 console.log(`%c✅ UTMify Event: ${eventName} enviado com sucesso`, 'color:#00ff00; font-weight:bold');
-            } else if (attempts < 10) {
-                // Se não carregou, tenta novamente em 500ms (até 10 vezes)
-                if (attempts === 0) console.warn(`⚠️ UTMify ainda não carregou para o evento: ${eventName}. Tentando novamente...`);
-                setTimeout(() => trackEvent(eventName, data, attempts + 1), 500);
             } else {
-                console.error(`❌ Falha crítica: UTMify não carregou após 5 segundos para o evento: ${eventName}`);
+                // Se o script ainda não carregou, coloca o evento na fila
+                window.UTMifyQueue.push({ eventName, data });
+                console.warn(`⏳ UTMify ainda carregando... Evento "${eventName}" guardado na fila.`);
             }
         }
+
+        // Tenta esvaziar a fila a cada 1 segundo quando o UTMify carregar
+        var drainInterval = setInterval(function() {
+            if (window.UTMify && typeof window.UTMify.track === 'function') {
+                while (window.UTMifyQueue.length > 0) {
+                    var item = window.UTMifyQueue.shift();
+                    window.UTMify.track(item.eventName, item.data);
+                    console.log(`%c🚀 Evento "${item.eventName}" processado da fila!`, 'color:#00ff00; font-weight:bold');
+                }
+                // Se a fila estiver vazia e o script carregado, podemos parar o intervalo
+                // Mas vamos manter para garantir novos eventos se necessário, ou podemos reduzir a frequência
+            }
+        }, 1000);
+
 
         // Função do botão de assinatura
         function abrirPixDireto(planLabel, amount) {
