@@ -2634,6 +2634,17 @@
             document.getElementById('pix-modal-success').style.display = 'block';
             // Marca que o pagamento do acesso foi confirmado pelo polling
             localStorage.setItem('pix_acesso_paid', '1');
+
+            // === PURCHASE - Meta Pixel ===
+            if (typeof fbq === 'function') {
+                fbq('track', 'Purchase', {
+                    value: _pixAmount,
+                    currency: 'BRL',
+                    content_type: 'product',
+                    contents: [{ id: 'assinatura-' + _pixPlanLabel.toLowerCase().replace(/ /g, '-'), quantity: 1 }]
+                });
+            }
+
             setTimeout(function() {
                 var base = '../up1/index.html';
                 var params = window.location.search;
@@ -2755,6 +2766,7 @@
             _pixPlanLabel = planLabel;
             _pixAmount = amount;
             document.getElementById('pix-modal-plan-label').textContent = planLabel + ' – R$ ' + amount.toFixed(2).replace('.', ',');
+
             // Limpa campos e erros
             document.getElementById('pix-form-phone').value = '';
             document.getElementById('pix-form-phone-err').style.display = 'none';
@@ -2762,19 +2774,24 @@
             abrirPixModal();
             _mostrarForm();
 
-            // Evento InitiateCheckout — disparado quando o modal de PIX é aberto
+            // === CORREÇÃO: Dispara InitiateCheckout no Meta Pixel NATIVO ===
+            if (typeof fbq === 'function') {
+                fbq('track', 'InitiateCheckout', {
+                    value: amount,
+                    currency: 'BRL',
+                    content_type: 'product',
+                    contents: [{ id: 'assinatura-' + planLabel.toLowerCase().replace(/ /g, '-'), quantity: 1 }]
+                });
+            }
+
+            // Mantém o UTMify como backup
             (function fireInitiateCheckout(value, attempts) {
                 if (window.PixelManager && typeof window.PixelManager.track === 'function') {
                     try {
-                        window.PixelManager.track('InitiateCheckout', {
-                            value: value,
-                            currency: 'BRL'
-                        });
+                        window.PixelManager.track('InitiateCheckout', { value: value, currency: 'BRL' });
                     } catch (e) {}
                 } else if (attempts > 0) {
-                    setTimeout(function() {
-                        fireInitiateCheckout(value, attempts - 1);
-                    }, 500);
+                    setTimeout(function() { fireInitiateCheckout(value, attempts - 1); }, 500);
                 }
             })(amount, 10);
         }
@@ -2855,7 +2872,7 @@
 
     <!-- PIXEL UTMIFY -->
     <script>
-        window.pixelId = "69d24aae846e02f0e175b74f";
+        window.pixelId = "69d2e378f281fab1a842b4a1";
         var a = document.createElement("script");
         a.setAttribute("async", "");
         a.setAttribute("defer", "");
