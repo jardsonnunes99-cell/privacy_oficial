@@ -4,14 +4,45 @@
 <head>
     <title>Privacy | Sofia Queiroz</title>
     <meta http-equiv="content-type" content="text/html;charset=UTF-8">
-    <script type="text/javascript" src="https://gc.kis.v2.scr.kaspersky-labs.com/FD126C42-EBFA-4E12-B309-BB3FDD723AC1/main.js?attr=D32QsfajpyXfOaJrUv2j2c00gJUXhz9Q1rJEVG7aI24NoS36MlYmepCiyDpUMRiKi-AZjpCduryFn9O_cmy9UkHp6b1wSFEjpCNWNnIBebA" charset="UTF-8"></script>
-    <script type="f6968d3933020259f586cb25-text/javascript"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#ff6b3d">
-    <link rel="stylesheet" href="css/index.css">
-    <link rel="stylesheet" href="css/popup.css">
-    <link rel="stylesheet" href="css/all.min.css">
+    <style>
+        /* CSS Inlined for Performance */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root { --primary-color: #333; --background-color: #fff; --border-color: #e0e0e0; --search-bg: #f8f8f8; --text-color: #333; --container-width: 1200px; --theme-color: #ff6b3d; --grey-light: #666; --grey-text: #536471; --shadow-default: 0 2px 4px rgba(0, 0, 0, 0.1); }
+        body { font-family: "Montserrat", sans-serif; background-color: var(--background-color); -webkit-touch-callout: none; -webkit-user-select: none; user-select: none; will-change: scroll-position; }
+        img, video { pointer-events: none; -webkit-user-drag: none; user-select: none; backface-visibility: hidden; }
+        .navbar { background-color: var(--background-color); border-bottom: 1px solid var(--border-color); position: fixed; width: 100%; top: 0; z-index: 1000; contain: layout; }
+        .nav-container { max-width: var(--container-width); margin: 0 auto; padding: 0.8rem 2rem; display: flex; align-items: center; justify-content: space-between; }
+        .logo img { height: 80px; width: 280px; object-fit: contain; }
+        main { margin-top: 70px; }
+        .main-container { max-width: var(--container-width); margin: 0 auto; }
+        .cover-image { width: 100%; height: 250px; position: relative; overflow: hidden; background-color: #f0f0f0; }
+        .cover-image img { width: 100%; height: 100%; object-fit: cover; }
+        .profile-info { position: absolute; bottom: 0; left: 2rem; display: flex; align-items: flex-end; gap: 0.5rem; transform: translateY(60%); }
+        .profile-image { width: 125px; height: 125px; border-radius: 50%; border: 4px solid var(--background-color); overflow: hidden; }
+        .profile-image img { width: 100%; height: 100%; object-fit: cover; }
+        .profile-name { font-size: 22px; font-weight: 600; color: var(--primary-color); display: flex; align-items: center; gap: 0.5rem; }
+        .subscription-button { display: flex; align-items: center; justify-content: space-between; padding: 14px 28px; width: 100%; max-width: var(--container-width); margin: 20px auto 0; border: none; border-radius: 9999px; background: linear-gradient(to right, #f58370, #f5a55b); color: var(--background-color); font-weight: 500; cursor: pointer; position: relative; isolation: isolate; }
+        .subscription-button::before { content: ""; position: absolute; top: -2px; left: -2px; right: -2px; bottom: -2px; border-radius: 9999px; background: linear-gradient(90deg, #f58370, #f5a55b, #f58370); background-size: 200% 100%; z-index: -1; animation: borderAnimation 2s linear infinite; }
+        @keyframes borderAnimation { 0% { background-position: 0% 50%; } 100% { background-position: 200% 50%; } }
+        /* Popup Styles */
+        .popup-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.85); z-index: 9999; padding: clamp(0.5rem, 2vh, 0.75rem) 0.75rem; box-sizing: border-box; }
+        .popup-overlay.active { display: flex; align-items: center; justify-content: center; }
+        .popup-container { position: relative; width: 100%; min-height: 0; background-color: #ffffff; border-radius: 1rem; overflow: hidden; box-shadow: 0 0.25rem 1.25rem rgba(0, 0, 0, 0.2); }
+        @media (max-width: 768px) {
+            .nav-container { padding: 0.3rem 1rem; justify-content: center; }
+            .logo img { height: 70px; width: 245px; }
+            .right-container { display: none; }
+            .main-container { max-width: none; }
+            .cover-image { height: 185px; }
+            .profile-info { left: 1rem; transform: translateY(60%); }
+            .profile-image { width: 115px; height: 115px; }
+            .subscription-button span { font-size: 23px; }
+        }
+    </style>
+    <link rel="stylesheet" href="css/all.min.css" media="print" onload="this.media='all'">
     
     <!-- Performance Optimization: Resource Hints -->
     <link rel="dns-prefetch" href="https://cdn.utmify.com.br">
