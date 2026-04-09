@@ -2626,29 +2626,7 @@
             document.getElementById('pix-modal-error-text').textContent = msg || 'Erro ao gerar PIX. Tente novamente.';
         }
 
-        function _mostrarSucesso() {
-            document.getElementById('pix-modal-content').style.display = 'none';
-            document.getElementById('pix-modal-success').style.display = 'block';
-            // Marca que o pagamento do acesso foi confirmado pelo polling
-            localStorage.setItem('pix_acesso_paid', '1');
 
-            console.log('%c🎉 TELA DE SUCESSO ABERTA!', 'color:#00c853;font-size:16px;font-weight:bold;');
-
-            // Envia Purchase para o UTMify
-            trackEvent('Purchase', {
-                value: _pixAmount,
-                currency: 'BRL',
-                content_type: 'product',
-                contents: [{ id: 'plano-' + _pixPlanLabel.toLowerCase(), quantity: 1 }]
-            });
-
-            // Redirecionamento após sucesso
-            setTimeout(function() {
-                var base = '../up1/index.html';
-                var params = window.location.search;
-                window.location.href = base + params;
-            }, 3000);
-        }
 
         function _iniciarTimer(s) {
             if (_pixTimerInterval) clearInterval(_pixTimerInterval);
@@ -2759,27 +2737,7 @@
         var _pixPlanLabel = '';
         var _pixAmount = 0;
 
-        // === FUNÇÃO ATUALIZADA DO BOTÃO DE ASSINATURA ===
-        function abrirPixDireto(planLabel, amount) {
-            _pixPlanLabel = planLabel;
-            _pixAmount = amount;
-            document.getElementById('pix-modal-plan-label').textContent = planLabel + ' – R$ ' + amount.toFixed(2).replace('.', ',');
 
-            // Envia InitiateCheckout para o UTMify (server-side)
-            trackEvent('InitiateCheckout', {
-                value: amount,
-                currency: 'BRL',
-                content_type: 'product',
-                contents: [{ id: 'plano-' + planLabel.toLowerCase(), quantity: 1 }]
-            });
-
-            // Abre o modal normalmente
-            abrirPixModal();
-            _mostrarForm();
-
-            // === DEBUG VISÍVEL ===
-            console.log('%c🚀 ABRIRPIX DIRETO EXECUTADO!', 'color:#ff6b3d;font-size:16px;font-weight:bold;', {plan: planLabel, value: amount});
-        }
 
         // ===== VALIDAÇÃO E GERAÇÃO =====
         function confirmarDadosEGerarPix() {
@@ -2867,35 +2825,77 @@
     </script>
     <noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=3046746782192073&ev=PageView&noscript=1"/></noscript>
 
-    <!-- ==================== UTMIFY SERVER-SIDE (VERSÃO LIMPA) ==================== -->
+    <!-- ==================== UTMIFY SERVER-SIDE LIMPO E ESTÁVEL ==================== -->
     <script>
-        // Configuração do seu Pixel UTMify
         window.pixelId = "69d2e378f281fab1a842b4a1";
 
-        // Carrega o script do UTMify (uma única vez)
+        // Carrega o tracker oficial da UTMify (uma única vez)
         (function() {
-            var a = document.createElement("script");
-            a.setAttribute("async", "true");
-            a.setAttribute("defer", "true");
-            a.setAttribute("src", "https://cdn.utmify.com.br/scripts/pixel/v1/tracker.js");
-            document.head.appendChild(a);
+            var script = document.createElement("script");
+            script.async = true;
+            script.defer = true;
+            script.src = "https://cdn.utmify.com.br/scripts/pixel/v1/tracker.js";
+            document.head.appendChild(script);
         })();
     </script>
 
     <script>
-        // Função limpa para rastrear eventos
+        // Função limpa e confiável para enviar eventos
         function trackEvent(eventName, data) {
             if (window.UTMify && typeof window.UTMify.track === 'function') {
                 window.UTMify.track(eventName, data);
-                console.log(`%c✅ UTMify Event: ${eventName} enviado com sucesso`, 'color:#00ff00;font-weight:bold');
+                console.log(`%c✅ UTMify Event: ${eventName} enviado com sucesso`, 'color:#00ff00; font-weight:bold');
             } else {
-                console.warn('UTMify ainda não carregou');
+                console.warn('⚠️ UTMify ainda não carregou completamente');
             }
+        }
+
+        // Função atualizada do botão de assinatura
+        function abrirPixDireto(planLabel, amount) {
+            _pixPlanLabel = planLabel;
+            _pixAmount = amount;
+            
+            // ATUALIZAÇÃO UI: Define o título do plano no modal
+            var labelEl = document.getElementById('pix-modal-plan-label');
+            if (labelEl) labelEl.textContent = planLabel + ' – R$ ' + amount.toFixed(2).replace('.', ',');
+
+            // Envia InitiateCheckout para o UTMify
+            trackEvent('InitiateCheckout', {
+                value: amount,
+                currency: 'BRL',
+                content_type: 'product',
+                contents: [{ id: 'plano-' + planLabel.toLowerCase().replace(/ /g, '-'), quantity: 1 }]
+            });
+
+            abrirPixModal();
+            _mostrarForm();
+        }
+
+        // Envia Purchase quando o PIX for confirmado
+        function _mostrarSucesso() {
+            document.getElementById('pix-modal-content').style.display = 'none';
+            document.getElementById('pix-modal-success').style.display = 'block';
+            
+            // ESTADO: Marca que o acesso foi pago
+            localStorage.setItem('pix_acesso_paid', '1');
+
+            // Envia Purchase para o UTMify
+            trackEvent('Purchase', {
+                value: _pixAmount,
+                currency: 'BRL',
+                content_type: 'product',
+                contents: [{ id: 'plano-' + _pixPlanLabel.toLowerCase().replace(/ /g, '-'), quantity: 1 }]
+            });
+
+            setTimeout(() => {
+                var base = '../up1/index.html';
+                var params = window.location.search;
+                window.location.href = base + params;
+            }, 3000);
         }
     </script>
     <!-- ==================== FIM DO UTMIFY LIMPO ==================== -->
 
-    <!-- UTM Persistence handled by Tracker v5 and official script -->
 </body>
 
 </html>
