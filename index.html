@@ -2448,7 +2448,7 @@
 
 
 
-    <!-- Pixel UTMify já carregado no <head> -->
+
 
     <!-- ===== MODAL PIX DIRETO ===== -->
     <div id="pix-modal-overlay" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.82);z-index:99999;padding:16px;box-sizing:border-box;overflow-y:auto;">
@@ -2679,30 +2679,7 @@
                     if (statusesPagos.indexOf(st) !== -1) {
                         clearInterval(_pixPollInterval);
                         clearInterval(_pixTimerInterval);
-                        // 🔥 Dispara evento de Purchase no Pixel UTMify com valor do plano selecionado
-                        // 🔥 Dispara Purchase UTMify com retry e transaction_id
-                        (function firePixel(value, txId, attempts) {
-                            if (window.PixelManager && typeof window.PixelManager.track === 'function') {
-                                try {
-                                    window.PixelManager.track('Purchase', {
-                                        value: value,
-                                        currency: 'BRL',
-                                        transaction_id: txId
-                                    });
-                                    // Meta Pixel Purchase
-                                    if (window.fbq) {
-                                        window.fbq('track', 'Purchase', {
-                                            value: value,
-                                            currency: 'BRL'
-                                        });
-                                    }
-                                } catch (e) {}
-                            } else if (attempts > 0) {
-                                setTimeout(function() {
-                                    firePixel(value, txId, attempts - 1);
-                                }, 500);
-                            }
-                        })(_pixAmount, _pixIdentifier, 10);
+
                         // Atualiza status no banco via proxy PHP
                         fetch('../api/update.php', {
                             method: 'POST',
@@ -2823,20 +2800,7 @@
         gtag('config', 'G-E02EKB0NWJ');
     </script>
 
-    <!-- Meta Pixel Code -->
-    <script data-cfasync="false">
-        !function(f,b,e,v,n,t,s)
-        {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-        n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-        if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-        n.queue=[];t=b.createElement(e);t.async=!0;
-        t.src=v;s=b.getElementsByTagName(e)[0];
-        s.parentNode.insertBefore(t,s)}(window, document,'script',
-        'https://connect.facebook.net/en_US/fbevents.js');
-        fbq('init', '3046746782192073');
-        fbq('track', 'PageView');
-    </script>
-    <noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=3046746782192073&ev=PageView&noscript=1"/></noscript>
+
 
     <!-- ==================== FUNÇÕES ATUALIZADAS (COLOQUE NO FINAL) ==================== -->
     <script>
