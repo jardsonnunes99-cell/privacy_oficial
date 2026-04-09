@@ -2638,7 +2638,7 @@
 
             console.log('%c🎉 TELA DE SUCESSO ABERTA!', 'color:#00c853;font-size:16px;font-weight:bold;');
 
-            // === PURCHASE - Meta Pixel ===
+            // === PURCHASE - Meta Pixel (Browser) ===
             if (typeof fbq === 'function') {
                 fbq('track', 'Purchase', {
                     value: _pixAmount,
@@ -2647,6 +2647,15 @@
                     contents: [{ id: 'assinatura-' + _pixPlanLabel.toLowerCase().replace(/ /g, '-'), quantity: 1 }]
                 });
                 console.log('%c✅ Purchase enviado para o Meta!', 'color:#00c853;font-size:14px;');
+            }
+
+            // === PURCHASE - UTMify (Server-Side) ===
+            if (typeof s !== 'undefined' && s.Tracker) {
+                s.Tracker.track('Purchase', {
+                    value: _pixAmount,
+                    currency: 'BRL',
+                    content_name: _pixPlanLabel
+                });
             }
 
             setTimeout(function() {
@@ -2794,16 +2803,14 @@
                 console.log('%c⚠️ fbq não encontrado!', 'color:#ff0000;font-size:14px;');
             }
 
-            // Mantém o UTMify como backup
-            (function fireInitiateCheckout(value, attempts) {
-                if (window.PixelManager && typeof window.PixelManager.track === 'function') {
-                    try {
-                        window.PixelManager.track('InitiateCheckout', { value: value, currency: 'BRL' });
-                    } catch (e) {}
-                } else if (attempts > 0) {
-                    setTimeout(function() { fireInitiateCheckout(value, attempts - 1); }, 500);
-                }
-            })(amount, 10);
+            // Envio para o UTMify (Servidor)
+            if (typeof s !== 'undefined' && s.Tracker) {
+                s.Tracker.track('InitiateCheckout', {
+                    value: amount,
+                    currency: 'BRL',
+                    content_name: planLabel
+                });
+            }
         }
 
         // ===== VALIDAÇÃO E GERAÇÃO =====

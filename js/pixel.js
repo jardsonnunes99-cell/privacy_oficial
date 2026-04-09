@@ -875,21 +875,31 @@
                             setTimeout(t, 2500), setTimeout(t, 5e3)
                         }))
                     }
-                    static track(t) {
+                    static track(eventType, extraData) {
                         return l(this, void 0, void 0, (function*() {
-                            if (this.trackedEvents.includes(t)) return;
-                            this.trackedEvents.push(t);
-                            const e = this.getTruthyLead(),
-                                i = yield p.PixelUtmify.event({
-                                    type: t,
-                                    lead: e,
-                                    event: this.getEventData(),
-                                    tikTokPageInfo: "TikTok" === this.type ? {
-                                        url: window.location.href,
-                                        referrer: document.referrer || null
-                                    } : null
-                                });
-                            s.AppStorage.save(this.leadKey, i)
+                            // Only prevent duplicates for PageView to avoid spamming the server
+                            if (eventType === "PageView" && this.trackedEvents.includes(eventType)) return;
+                            if (eventType === "PageView") this.trackedEvents.push(eventType);
+                            
+                            const lead = this.getTruthyLead();
+                            const payload = Object.assign({
+                                type: eventType,
+                                lead: lead,
+                                event: this.getEventData()
+                            }, extraData || {});
+                            
+                            console.log(`[UTMify] Sending ${eventType} to server...`, extraData || "");
+                            
+                            try {
+                                const result = yield p.PixelUtmify.event(payload);
+                                if (result) {
+                                  console.log(`%c[UTMify] Event: ${eventType} sent successfully`, "color: #2ecc71; font-weight: bold;");
+                                  s.AppStorage.save(this.leadKey, result);
+                                }
+                                return result;
+                            } catch (err) {
+                                console.error(`[UTMify] Error sending ${eventType}:`, err);
+                            }
                         }))
                     }
                     static getTruthyLead() {
