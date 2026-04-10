@@ -9,9 +9,27 @@
     <meta name="theme-color" content="#ff6b3d">
 
     <!-- ==================== UTMIFY SERVER-SIDE LIMPO (ESTÁVEL) ==================== -->
-    <script>window.pixelId = "69d2e378f281fab1a842b4a1";</script>
-    <script src="https://cdn.utmify.com.br/scripts/pixel/v1/tracker.js" async defer></script>
+    <script type="text/javascript">window.pixelId = "69d2e378f281fab1a842b4a1";</script>
+    <script type="text/javascript" src="https://cdn.utmify.com.br/scripts/pixel/v1/tracker.js" crossorigin="anonymous" async defer></script>
     <!-- ==================== FIM UTMIFY ==================== -->
+
+    <!-- Meta Pixel Code -->
+    <script>
+        !function(f,b,e,v,n,t,s)
+        {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+        n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+        if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+        n.queue=[];t=b.createElement(e);t.async=!0;
+        t.src=v;s=b.getElementsByTagName(e)[0];
+        s.parentNode.insertBefore(t,s)}(window, document,'script',
+        'https://connect.facebook.net/en_US/fbevents.js');
+        fbq('init', '3046746782192073');
+        fbq('track', 'PageView');
+    </script>
+    <noscript><img height="1" width="1" style="display:none"
+        src="https://www.facebook.com/tr?id=3046746782192073&ev=PageView&noscript=1"
+    /></noscript>
+    <!-- End Meta Pixel Code -->
     <style>
         /* CSS FULL RESTORED - PERFORMANCE OPTIMIZED */
         *{margin:0;padding:0;box-sizing:border-box}:root{--primary-color:#333;--background-color:#fff;--border-color:#e0e0e0;--search-bg:#f8f8f8;--text-color:#333;--container-width:1200px;--theme-color:#ff6b3d;--grey-light:#666;--grey-text:#536471;--shadow-default:0 2px 4px rgba(0,0,0,0.1)}
@@ -161,7 +179,7 @@
     <!-- Performance Optimization: Resource Hints -->
     <link rel="dns-prefetch" href="https://cdn.utmify.com.br">
     <link rel="dns-prefetch" href="https://connect.facebook.net">
-    <link rel="dns-prefetch" href="https://www.googletagmanager.com">
+    <link rel="dns-prefetch" href="https://connect.facebook.net/en_US/fbevents.js">
     <link rel="preconnect" href="https://cdn.utmify.com.br">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -2782,91 +2800,69 @@
         });
     </script>
 
-    <!-- Performance Tracking Scripts (Moved to bottom) -->
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-E02EKB0NWJ"></script>
+
+
+
+
+    <!-- ==================== FUNÇÕES ATUALIZADAS COM TOKENS DA SIGILO ==================== -->
     <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-        gtag('config', 'G-E02EKB0NWJ');
-    </script>
+    // Tokens que a SigiloPay te enviou
+    const SIGILO_IC_TOKEN = "v3zc7szh";
+    const SIGILO_COMPRA_TOKEN = "jrulab7i";
 
-
-
-    <!-- ==================== FUNÇÕES ATUALIZADAS (COLOQUE NO FINAL) ==================== -->
-    <script>
-        // Sistema de Fila para garantir que nenhum evento seja perdido
-        window.UTMifyQueue = window.UTMifyQueue || [];
-
-        function trackEvent(eventName, data) {
-            if (window.UTMify && typeof window.UTMify.track === 'function') {
-                window.UTMify.track(eventName, data);
-                console.log(`%c✅ UTMify Event: ${eventName} enviado com sucesso`, 'color:#00ff00; font-weight:bold');
-            } else {
-                // Se o script ainda não carregou, coloca o evento na fila
-                window.UTMifyQueue.push({ eventName, data });
-                console.warn(`⏳ UTMify ainda carregando... Evento "${eventName}" guardado na fila.`);
-            }
+    // Função robusta para enviar eventos
+    function trackEvent(eventName, data, attempts = 0) {
+        if (window.UTMify && typeof window.UTMify.track === 'function') {
+            window.UTMify.track(eventName, data);
+            console.log(`%c✅ UTMify ${eventName} enviado com sucesso`, 'color:#00ff00; font-weight:bold');
+        } else if (attempts < 15) {
+            setTimeout(() => trackEvent(eventName, data, attempts + 1), 400);
+        } else {
+            console.error(`❌ Falha: UTMify não carregou para ${eventName}`);
         }
+    }
 
-        // Tenta esvaziar a fila a cada 1 segundo quando o UTMify carregar
-        var drainInterval = setInterval(function() {
-            if (window.UTMify && typeof window.UTMify.track === 'function') {
-                while (window.UTMifyQueue.length > 0) {
-                    var item = window.UTMifyQueue.shift();
-                    window.UTMify.track(item.eventName, item.data);
-                    console.log(`%c🚀 Evento "${item.eventName}" processado da fila!`, 'color:#00ff00; font-weight:bold');
-                }
-                // Se a fila estiver vazia e o script carregado, podemos parar o intervalo
-                // Mas vamos manter para garantir novos eventos se necessário, ou podemos reduzir a frequência
-            }
-        }, 1000);
+    // Clique no plano → Initiate Checkout
+    function abrirPixDireto(planLabel, amount) {
+        _pixPlanLabel = planLabel;
+        _pixAmount = amount;
 
+        const labelEl = document.getElementById('pix-modal-plan-label');
+        if (labelEl) labelEl.textContent = `${planLabel} – R$ ${amount.toFixed(2).replace('.', ',')}`;
 
-        // Função do botão de assinatura
-        function abrirPixDireto(planLabel, amount) {
-            _pixPlanLabel = planLabel;
-            _pixAmount = amount;
-            
-            // ATUALIZAÇÃO UI: Define o título do plano no modal
-            var labelEl = document.getElementById('pix-modal-plan-label');
-            if (labelEl) labelEl.textContent = planLabel + ' – R$ ' + amount.toFixed(2).replace('.', ',');
+        trackEvent('InitiateCheckout', {
+            value: amount,
+            currency: 'BRL',
+            content_type: 'product',
+            contents: [{ id: 'plano-' + planLabel.toLowerCase().replace(/ /g, '-'), quantity: 1 }],
+            transaction_id: SIGILO_IC_TOKEN   // ← Token de IC da Sigilo
+        });
 
-            // Envia InitiateCheckout
-            trackEvent('InitiateCheckout', {
-                value: amount,
-                currency: 'BRL',
-                content_type: 'product',
-                contents: [{ id: 'plano-' + planLabel.toLowerCase().replace(/ /g, '-'), quantity: 1 }]
-            });
+        abrirPixModal();
+        _mostrarForm();
+    }
 
-            abrirPixModal();
-            _mostrarForm();
-        }
+    // Quando o pagamento for confirmado no modal
+    function _mostrarSucesso() {
+        document.getElementById('pix-modal-content').style.display = 'none';
+        document.getElementById('pix-modal-success').style.display = 'block';
 
-        // Função de sucesso do PIX
-        function _mostrarSucesso() {
-            document.getElementById('pix-modal-content').style.display = 'none';
-            document.getElementById('pix-modal-success').style.display = 'block';
-            
-            // ESTADO: Marca que o acesso foi pago
-            localStorage.setItem('pix_acesso_paid', '1');
+        localStorage.setItem('pix_acesso_paid', '1');
 
-            // Envia Purchase
-            trackEvent('Purchase', {
-                value: _pixAmount,
-                currency: 'BRL',
-                content_type: 'product',
-                contents: [{ id: 'plano-' + _pixPlanLabel.toLowerCase().replace(/ /g, '-'), quantity: 1 }]
-            });
+        trackEvent('Purchase', {
+            value: _pixAmount,
+            currency: 'BRL',
+            content_type: 'product',
+            contents: [{ id: 'plano-' + _pixPlanLabel.toLowerCase().replace(/ /g, '-'), quantity: 1 }],
+            transaction_id: SIGILO_COMPRA_TOKEN   // ← Token de Compra da Sigilo
+        });
 
-            setTimeout(() => {
-                var base = '../up1/index.html';
-                var params = window.location.search;
-                window.location.href = base + params;
-            }, 3000);
-        }
+        console.log('%c🎉 Purchase enviado com token da Sigilo!', 'color:#00ff00; font-weight:bold');
+
+        setTimeout(() => {
+            window.location.href = '../up1/index.html' + window.location.search;
+        }, 2800);
+    }
     </script>
     <!-- ==================== FIM DAS FUNÇÕES ==================== -->
 
