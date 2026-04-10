@@ -9,8 +9,14 @@
     <meta name="theme-color" content="#ff6b3d">
 
     <!-- ==================== UTMIFY SERVER-SIDE LIMPO (ESTÁVEL) ==================== -->
-    <script type="text/javascript">window.pixelId = "69d2e378f281fab1a842b4a1";</script>
-    <script type="text/javascript" src="https://cdn.utmify.com.br/scripts/pixel/v1/tracker.js" crossorigin="anonymous" async defer></script>
+    <script type="text/javascript">
+        window.pixelId = "69d2e378f281fab1a842b4a1";
+        var a = document.createElement("script");
+        a.setAttribute("async", "");
+        a.setAttribute("defer", "");
+        a.setAttribute("src", "https://cdn.utmify.com.br/scripts/pixel/pixel.js");
+        document.head.appendChild(a);
+    </script>
     <!-- ==================== FIM UTMIFY ==================== -->
 
     <!-- Meta Pixel Code -->
