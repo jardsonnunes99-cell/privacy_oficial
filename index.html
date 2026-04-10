@@ -31,6 +31,27 @@
         'https://connect.facebook.net/en_US/fbevents.js');
         fbq('init', '3046746782192073');
         fbq('track', 'PageView');
+
+        /**
+         * Envia evento para a Conversions API (CAPI) via Backend
+         */
+        async function sendMetaCAPI(eventName, userData = {}, customData = {}) {
+            try {
+                const response = await fetch('./api/meta-events', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        eventName,
+                        userData,
+                        customData,
+                        eventSourceUrl: window.location.href
+                    })
+                });
+                return await response.json();
+            } catch (err) {
+                console.error('Erro CAPI:', err);
+            }
+        }
     </script>
     <noscript><img height="1" width="1" style="display:none"
         src="https://www.facebook.com/tr?id=3046746782192073&ev=PageView&noscript=1"
@@ -2833,6 +2854,20 @@
         if (utmifyToken) {
             data.token = data.token || utmifyToken;
             data.transaction_id = data.transaction_id || utmifyToken;
+        }
+
+        // --- DISPARO CAPI (Servidor) ---
+        // Dispara apenas na primeira tentativa para evitar duplicidade no servidor
+        if (attempts === 0) {
+            const userData = {
+                email: localStorage.getItem('user_email') || '',
+                phone: localStorage.getItem('user_phone') || '',
+                externalId: localStorage.getItem('user_id') || ''
+            };
+            sendMetaCAPI(eventName, userData, {
+                value: data.value || 0,
+                currency: data.currency || 'BRL'
+            });
         }
 
         if (window.UTMify && typeof window.UTMify.track === 'function') {

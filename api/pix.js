@@ -74,7 +74,7 @@ export default async function handler(req, res) {
     // Meta CAPI - InitiateCheckout (Server-side tracking)
     try {
       const META_PIXEL_ID = '3046746782192073';
-      const META_ACCESS_TOKEN = 'EAA4kfEmICLcBRGww2BKhhMTZBoRAkRaUJC6Q2FdUV8ahFbKEECtl2qlOtZAZBCpmZCiqjK8Cqmz8mbomqNmRUYQBt6JjM6atfhim78OgsGJHM4q5qr07HkBarRLYQXGhJwtXFCIqdiK8IIZB3z2EnYCB6b7ZA9J9ZC8AoOm8hgUGtNwVLQ0VOyOOf68B0wtrQZDZD';
+      const META_ACCESS_TOKEN = 'EAA4kfEmICLcBRLZAXKSztZC1IZAmeTRd5fS8ZCaUhwLleatFP3cV5mghjVYYowS4EEGK2pDCjhvmIXfwmZA8pf0IZAvdq37qKxAnyAVZCNBYg2Xb3s5I4yEB9o1hkjldWB95SZATyJbDFKGnKBym3EbABRUIayZC4ouSkCjm4qU708UC2KJqbVMumuRgJFrijLAZDZD';
       
       const crypto = require('crypto');
       const hash = (str) => crypto.createHash('sha256').update(str.trim().toLowerCase()).digest('hex');
