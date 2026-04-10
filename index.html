@@ -2804,16 +2804,17 @@
 
 
 
-    <!-- ==================== FUNÇÕES ATUALIZADAS COM TOKENS DA SIGILO (VERSÃO FORTIFICADA) ==================== -->
+    <!-- ==================== FUNÇÕES DE TRACKING COM TOKENS DA SIGILO (VERSÃO FINAL) ==================== -->
     <script>
     // Tokens da SigiloPay
     const SIGILO_IC_TOKEN = "v3zc7szh";
     const SIGILO_COMPRA_TOKEN = "jrulab7i";
 
-    // Função robusta com fallback para Meta Pixel (Corrigida para evitar duplicidade)
+    // Flag para evitar duplicidade no Meta Pixel
+    let metaFallbackFired = false;
+
     function trackEvent(eventName, data, attempts = 0) {
-        const maxAttempts = 40;        // aumentado
-        const delay = 500;             // aumentado
+        const maxAttempts = 40;
 
         if (window.UTMify && typeof window.UTMify.track === 'function') {
             window.UTMify.track(eventName, data);
@@ -2821,8 +2822,9 @@
             return;
         }
 
-        // Fallback direto para Meta Pixel (fbq) - DISPARA APENAS NA PRIMEIRA TENTATIVA
-        if (attempts === 0 && window.fbq) {
+        // Fallback Meta Pixel (dispara APENAS 1 vez)
+        if (!metaFallbackFired && window.fbq) {
+            metaFallbackFired = true;
             const fbqData = {
                 value: data.value || 0,
                 currency: data.currency || 'BRL',
@@ -2834,11 +2836,9 @@
         }
 
         if (attempts < maxAttempts) {
-            console.log(`%c⏳ Tentando UTMify novamente (${attempts + 1}/${maxAttempts})...`, 'color:#ffaa00');
-            setTimeout(() => trackEvent(eventName, data, attempts + 1), delay);
+            setTimeout(() => trackEvent(eventName, data, attempts + 1), 500);
         } else {
             console.error(`❌ FALHA CRÍTICA: UTMify não carregou após ${maxAttempts} tentativas para ${eventName}`);
-            console.log('%c💡 Dica: Verifique se o UTMify está bloqueado (Kaspersky, adblock, etc)', 'color:#ff0000');
         }
     }
 
