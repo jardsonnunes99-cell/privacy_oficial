@@ -2810,14 +2810,36 @@
     const SIGILO_IC_TOKEN = "v3zc7szh";
     const SIGILO_COMPRA_TOKEN = "jrulab7i";
 
+    function getUtmifyTokenForEvent(eventName) {
+        if (eventName === 'InitiateCheckout') return SIGILO_IC_TOKEN;
+        if (eventName === 'Purchase') return SIGILO_COMPRA_TOKEN;
+        return null;
+    }
+
     // Função robusta com fallback para Meta Pixel (Corrigida para evitar duplicidade)
     function trackEvent(eventName, data, attempts = 0) {
         const maxAttempts = 40;        // aumentado
         const delay = 500;             // aumentado
 
+        const utmifyToken = getUtmifyTokenForEvent(eventName);
+        if (utmifyToken) {
+            data.token = data.token || utmifyToken;
+            data.transaction_id = data.transaction_id || utmifyToken;
+        }
+
         if (window.UTMify && typeof window.UTMify.track === 'function') {
-            window.UTMify.track(eventName, data);
-            console.log(`%c✅ UTMify ${eventName} enviado com sucesso`, 'color:#00ff00; font-weight:bold');
+            try {
+                window.UTMify.track(eventName, data);
+                console.log(`%c✅ UTMify ${eventName} enviado com sucesso`, 'color:#00ff00; font-weight:bold');
+                return;
+            } catch (err) {
+                console.warn(`%c⚠️ Erro ao enviar para UTMify (${eventName}): ${err.message}`, 'color:#ffaa00');
+            }
+        }
+
+        if (window.Tracker && typeof window.Tracker.track === 'function') {
+            window.Tracker.track(eventName, data);
+            console.log(`%c🔁 Tracker local ${eventName} enviado como fallback`, 'color:#00ccff; font-weight:bold');
             return;
         }
 
