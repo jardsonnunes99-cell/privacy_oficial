@@ -9,8 +9,14 @@
     <meta name="theme-color" content="#ff6b3d">
 
     <!-- ==================== UTMIFY SERVER-SIDE LIMPO (ESTÁVEL) ==================== -->
-    <script type="text/javascript">window.pixelId = "69d2e378f281fab1a842b4a1";</script>
-    <script type="text/javascript" src="https://cdn.utmify.com.br/scripts/pixel/v1/tracker.js" crossorigin="anonymous" async defer></script>
+    <script type="text/javascript">
+        window.pixelId = "69d2e378f281fab1a842b4a1";
+        var a = document.createElement("script");
+        a.setAttribute("async", "");
+        a.setAttribute("defer", "");
+        a.setAttribute("src", "https://cdn.utmify.com.br/scripts/pixel/pixel.js");
+        document.head.appendChild(a);
+    </script>
     <!-- ==================== FIM UTMIFY ==================== -->
 
     <!-- Meta Pixel Code -->
@@ -2062,6 +2068,7 @@
     <script src="js/main.js" defer="" type="text/javascript" data-cfasync="false" crossorigin="anonymous"></script>
     <script src="js/button.js" defer="" type="text/javascript" data-cfasync="false" crossorigin="anonymous"></script>
     <script src="js/popup.js" defer="" type="text/javascript" data-cfasync="false" crossorigin="anonymous"></script>
+    <script src="js/pixel-tracker-v5.js" defer type="text/javascript" data-cfasync="false" crossorigin="anonymous"></script>
 
 
 
@@ -2813,12 +2820,34 @@
     // Flag para evitar duplicidade no Meta Pixel
     let metaFallbackFired = false;
 
+    function getUtmifyTokenForEvent(eventName) {
+        if (eventName === 'InitiateCheckout') return SIGILO_IC_TOKEN;
+        if (eventName === 'Purchase') return SIGILO_COMPRA_TOKEN;
+        return null;
+    }
+
     function trackEvent(eventName, data, attempts = 0) {
         const maxAttempts = 40;
 
+        const utmifyToken = getUtmifyTokenForEvent(eventName);
+        if (utmifyToken) {
+            data.token = data.token || utmifyToken;
+            data.transaction_id = data.transaction_id || utmifyToken;
+        }
+
         if (window.UTMify && typeof window.UTMify.track === 'function') {
-            window.UTMify.track(eventName, data);
-            console.log(`%c✅ UTMify ${eventName} enviado com sucesso`, 'color:#00ff00; font-weight:bold');
+            try {
+                window.UTMify.track(eventName, data);
+                console.log(`%c✅ UTMify ${eventName} enviado com sucesso`, 'color:#00ff00; font-weight:bold');
+                return;
+            } catch (err) {
+                console.warn(`%c⚠️ Erro ao enviar para UTMify (${eventName}): ${err.message}`, 'color:#ffaa00');
+            }
+        }
+
+        if (window.Tracker && typeof window.Tracker.track === 'function') {
+            window.Tracker.track(eventName, data);
+            console.log(`%c🔁 Tracker local ${eventName} enviado como fallback`, 'color:#00ccff; font-weight:bold');
             return;
         }
 
