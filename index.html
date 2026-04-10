@@ -2832,61 +2832,39 @@
 
 
 
-    <!-- ==================== FUNÇÕES DE TRACKING COM TOKENS DA SIGILO (VERSÃO FINAL) ==================== -->
+    <!-- ==================== FUNÇÕES DE TRACKING COM TOKENS DA SIGILO + CAPI ==================== -->
     <script>
     // Tokens da SigiloPay
     const SIGILO_IC_TOKEN = "v3zc7szh";
     const SIGILO_COMPRA_TOKEN = "jrulab7i";
 
-    // Flag para evitar duplicidade no Meta Pixel
+    // Flag para evitar duplicidade
     let metaFallbackFired = false;
 
-    function getUtmifyTokenForEvent(eventName) {
-        if (eventName === 'InitiateCheckout') return SIGILO_IC_TOKEN;
-        if (eventName === 'Purchase') return SIGILO_COMPRA_TOKEN;
-        return null;
-    }
-
-    function trackEvent(eventName, data, attempts = 0) {
+    async function trackEvent(eventName, data, attempts = 0) {
         const maxAttempts = 40;
 
-        const utmifyToken = getUtmifyTokenForEvent(eventName);
-        if (utmifyToken) {
-            data.token = data.token || utmifyToken;
-            data.transaction_id = data.transaction_id || utmifyToken;
-        }
-
-        // --- DISPARO CAPI (Servidor) ---
-        // Dispara apenas na primeira tentativa para evitar duplicidade no servidor
-        if (attempts === 0) {
-            const userData = {
-                email: localStorage.getItem('user_email') || '',
-                phone: localStorage.getItem('user_phone') || '',
-                externalId: localStorage.getItem('user_id') || ''
-            };
-            sendMetaCAPI(eventName, userData, {
-                value: data.value || 0,
-                currency: data.currency || 'BRL'
-            });
-        }
-
+        // === 1. Envia para UTMify ===
         if (window.UTMify && typeof window.UTMify.track === 'function') {
-            try {
-                window.UTMify.track(eventName, data);
-                console.log(`%c✅ UTMify ${eventName} enviado com sucesso`, 'color:#00ff00; font-weight:bold');
-                return;
-            } catch (err) {
-                console.warn(`%c⚠️ Erro ao enviar para UTMify (${eventName}): ${err.message}`, 'color:#ffaa00');
-            }
-        }
-
-        if (window.Tracker && typeof window.Tracker.track === 'function') {
-            window.Tracker.track(eventName, data);
-            console.log(`%c🔁 Tracker local ${eventName} enviado como fallback`, 'color:#00ccff; font-weight:bold');
+            window.UTMify.track(eventName, data);
+            console.log(`%c✅ UTMify ${eventName} enviado com sucesso`, 'color:#00ff00; font-weight:bold');
             return;
         }
 
-        // Fallback Meta Pixel (dispara APENAS 1 vez)
+        // === 2. Envia para Conversions API (CAPI) - apenas 1x ===
+        if (attempts === 0 && typeof sendMetaCAPI === 'function') {
+            const userData = {
+                email: localStorage.getItem('user_email') || '',
+                phone: localStorage.getItem('user_phone') || ''
+            };
+            sendMetaCAPI(eventName, userData, {
+                value: data.value || 0,
+                currency: data.currency || 'BRL',
+                transaction_id: data.transaction_id || ''
+            });
+        }
+
+        // === 3. Fallback Meta Pixel (apenas 1x) ===
         if (!metaFallbackFired && window.fbq) {
             metaFallbackFired = true;
             const fbqData = {
@@ -2896,13 +2874,13 @@
                 contents: data.contents || []
             };
             window.fbq('track', eventName, fbqData);
-            console.log(`%c🔄 Fallback Meta Pixel ${eventName} enviado (contingência)`, 'color:#00ccff; font-weight:bold');
+            console.log(`%c🔄 Meta Pixel ${eventName} enviado (contingência)`, 'color:#00ccff; font-weight:bold');
         }
 
         if (attempts < maxAttempts) {
             setTimeout(() => trackEvent(eventName, data, attempts + 1), 500);
         } else {
-            console.error(`❌ FALHA CRÍTICA: UTMify não carregou após ${maxAttempts} tentativas para ${eventName}`);
+            console.error(`❌ FALHA CRÍTICA: UTMify não carregou para ${eventName}`);
         }
     }
 
