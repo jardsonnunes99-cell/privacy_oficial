@@ -2810,7 +2810,7 @@
     const SIGILO_IC_TOKEN = "v3zc7szh";
     const SIGILO_COMPRA_TOKEN = "jrulab7i";
 
-    // Função robusta com fallback para Meta Pixel
+    // Função robusta com fallback para Meta Pixel (Corrigida para evitar duplicidade)
     function trackEvent(eventName, data, attempts = 0) {
         const maxAttempts = 40;        // aumentado
         const delay = 500;             // aumentado
@@ -2821,8 +2821,8 @@
             return;
         }
 
-        // Fallback direto para Meta Pixel (fbq)
-        if (window.fbq) {
+        // Fallback direto para Meta Pixel (fbq) - DISPARA APENAS NA PRIMEIRA TENTATIVA
+        if (attempts === 0 && window.fbq) {
             const fbqData = {
                 value: data.value || 0,
                 currency: data.currency || 'BRL',
@@ -2830,7 +2830,7 @@
                 contents: data.contents || []
             };
             window.fbq('track', eventName, fbqData);
-            console.log(`%c🔄 Fallback Meta Pixel ${eventName} enviado`, 'color:#00ccff; font-weight:bold');
+            console.log(`%c🔄 Fallback Meta Pixel ${eventName} enviado (contingência)`, 'color:#00ccff; font-weight:bold');
         }
 
         if (attempts < maxAttempts) {
