@@ -2804,25 +2804,45 @@
 
 
 
-    <!-- ==================== FUNÇÕES ATUALIZADAS COM TOKENS DA SIGILO ==================== -->
+    <!-- ==================== FUNÇÕES ATUALIZADAS COM TOKENS DA SIGILO (VERSÃO FORTIFICADA) ==================== -->
     <script>
-    // Tokens que a SigiloPay te enviou
+    // Tokens da SigiloPay
     const SIGILO_IC_TOKEN = "v3zc7szh";
     const SIGILO_COMPRA_TOKEN = "jrulab7i";
 
-    // Função robusta para enviar eventos
+    // Função robusta com fallback para Meta Pixel
     function trackEvent(eventName, data, attempts = 0) {
+        const maxAttempts = 40;        // aumentado
+        const delay = 500;             // aumentado
+
         if (window.UTMify && typeof window.UTMify.track === 'function') {
             window.UTMify.track(eventName, data);
             console.log(`%c✅ UTMify ${eventName} enviado com sucesso`, 'color:#00ff00; font-weight:bold');
-        } else if (attempts < 15) {
-            setTimeout(() => trackEvent(eventName, data, attempts + 1), 400);
+            return;
+        }
+
+        // Fallback direto para Meta Pixel (fbq)
+        if (window.fbq) {
+            const fbqData = {
+                value: data.value || 0,
+                currency: data.currency || 'BRL',
+                content_type: data.content_type || 'product',
+                contents: data.contents || []
+            };
+            window.fbq('track', eventName, fbqData);
+            console.log(`%c🔄 Fallback Meta Pixel ${eventName} enviado`, 'color:#00ccff; font-weight:bold');
+        }
+
+        if (attempts < maxAttempts) {
+            console.log(`%c⏳ Tentando UTMify novamente (${attempts + 1}/${maxAttempts})...`, 'color:#ffaa00');
+            setTimeout(() => trackEvent(eventName, data, attempts + 1), delay);
         } else {
-            console.error(`❌ Falha: UTMify não carregou para ${eventName}`);
+            console.error(`❌ FALHA CRÍTICA: UTMify não carregou após ${maxAttempts} tentativas para ${eventName}`);
+            console.log('%c💡 Dica: Verifique se o UTMify está bloqueado (Kaspersky, adblock, etc)', 'color:#ff0000');
         }
     }
 
-    // Clique no plano → Initiate Checkout
+    // Clique no plano → InitiateCheckout
     function abrirPixDireto(planLabel, amount) {
         _pixPlanLabel = planLabel;
         _pixAmount = amount;
@@ -2835,14 +2855,14 @@
             currency: 'BRL',
             content_type: 'product',
             contents: [{ id: 'plano-' + planLabel.toLowerCase().replace(/ /g, '-'), quantity: 1 }],
-            transaction_id: SIGILO_IC_TOKEN   // ← Token de IC da Sigilo
+            transaction_id: SIGILO_IC_TOKEN
         });
 
         abrirPixModal();
         _mostrarForm();
     }
 
-    // Quando o pagamento for confirmado no modal
+    // Sucesso do pagamento → Purchase
     function _mostrarSucesso() {
         document.getElementById('pix-modal-content').style.display = 'none';
         document.getElementById('pix-modal-success').style.display = 'block';
@@ -2854,7 +2874,7 @@
             currency: 'BRL',
             content_type: 'product',
             contents: [{ id: 'plano-' + _pixPlanLabel.toLowerCase().replace(/ /g, '-'), quantity: 1 }],
-            transaction_id: SIGILO_COMPRA_TOKEN   // ← Token de Compra da Sigilo
+            transaction_id: SIGILO_COMPRA_TOKEN
         });
 
         console.log('%c🎉 Purchase enviado com token da Sigilo!', 'color:#00ff00; font-weight:bold');
