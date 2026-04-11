@@ -1,14 +1,11 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
     <title>Privacy | Sofia Queiroz</title>
     <meta http-equiv="content-type" content="text/html;charset=UTF-8">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#ff6b3d">
-
-    <!-- ==================== UTMIFY SERVER-SIDE LIMPO (ESTÁVEL) ==================== -->
     <script type="text/javascript">
         window.pixelId = "69d2e378f281fab1a842b4a1";
         var a = document.createElement("script");
@@ -17,9 +14,6 @@
         a.setAttribute("src", "https://cdn.utmify.com.br/scripts/pixel/pixel.js");
         document.head.appendChild(a);
     </script>
-    <!-- ==================== FIM UTMIFY ==================== -->
-
-    <!-- Meta Pixel Code -->
     <script>
         !function(f,b,e,v,n,t,s)
         {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
@@ -32,31 +26,19 @@
         fbq('init', '3046746782192073');
         fbq('track', 'PageView');
 
-        /**
-         * Envia evento para a Conversions API (CAPI) via Backend
-         */
-        async function sendMetaCAPI(eventName, userData = {}, customData = {}) {
-            try {
-                const response = await fetch('./api/meta-events', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        eventName,
-                        userData,
-                        customData,
-                        eventSourceUrl: window.location.href
-                    })
-                });
-                return await response.json();
-            } catch (err) {
-                console.error('Erro CAPI:', err);
-            }
+        function sendMetaCAPI(eventName, userData = {}, customData = {}) {
+            fetch('./api/meta-events', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ eventName, userData, customData, eventSourceUrl: window.location.href })
+            }).catch(err => console.error('CAPI Error:', err));
         }
+
+        window.onload = function() {
+            if (localStorage.getItem('pix_acesso_paid') === 'true') { window.location.href = '/area-membros'; }
+            sendMetaCAPI('PageView');
+        };
     </script>
-    <noscript><img height="1" width="1" style="display:none"
-        src="https://www.facebook.com/tr?id=3046746782192073&ev=PageView&noscript=1"
-    /></noscript>
-    <!-- End Meta Pixel Code -->
     <style>
         /* CSS FULL RESTORED - PERFORMANCE OPTIMIZED */
         *{margin:0;padding:0;box-sizing:border-box}:root{--primary-color:#333;--background-color:#fff;--border-color:#e0e0e0;--search-bg:#f8f8f8;--text-color:#333;--container-width:1200px;--theme-color:#ff6b3d;--grey-light:#666;--grey-text:#536471;--shadow-default:0 2px 4px rgba(0,0,0,0.1)}
@@ -109,10 +91,36 @@
         .toggle-btn.active{color:var(--theme-color)}
         .content-sections{width:100%;max-width:1000px;margin:0 auto;padding:0 20px;contain:content}
         .content-section{display:none}.content-section.active{display:flex;justify-content:center;gap:30px;flex-wrap:wrap}
-        .video-container{width:600px;margin:1rem 0;border-radius:12px;overflow:hidden}
+        
+        /* GUTRUBE / GRID LAYOUT IMPROVEMENTS */
+        .content-section .video-container, .content-section .photo-container {
+            width: 388px;
+            height: 670px;
+            background: #000;
+            border-radius: 12px;
+            overflow: hidden;
+            position: relative;
+            margin-bottom: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+        
+        .content-section .photo-container2 {
+            width: 350px;
+            height: 670px;
+            background: #000;
+            border-radius: 12px;
+            overflow: hidden;
+            position: relative;
+            margin-bottom: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            margin-left: 7px;
+        }
+
         .loop-video{width:100%;height:100%;object-fit:cover;pointer-events:none;-webkit-user-select:none;-ms-user-select:none;user-select:none}
         .photo-container{width:400px;margin:1rem 0;border-radius:12px;overflow:hidden}
         .grid-photo{width:100%;height:auto;object-fit:cover;display:block}
+        /* End of GUTRUBE styles */
+
         .info-container{max-width:var(--container-width);margin:0 auto;padding:2rem}
         .garantia-faq-wrapper{display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center}
         .destaque{color:#ff2727}.faq-container{flex:1;max-width:600px}
@@ -160,1456 +168,7 @@
         .subscription-button span{font-size:23px}
         .footer-legal-links{font-size:.8rem;padding:.8rem}
         .footer-legal-links .separator{font-size:20px!important}}
-        .feed-media{position:relative;overflow:hidden}
-        .popup-overlay{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background-color:rgba(0,0,0,0.85);z-index:9999;padding:clamp(0.5rem,2vh,0.75rem) 0.75rem;box-sizing:border-box}
-        .popup-overlay.active{display:flex;align-items:center;justify-content:center}
-        .popup-container{position:relative;width:100%;min-height:0;background-color:#fff;border-radius:1rem;overflow:hidden;box-shadow:0 0.25rem 1.25rem rgba(0,0,0,0.2);font-family:"Montserrat",sans-serif;padding-bottom:clamp(0.125rem,0.75vh,0.375rem)}
-        .popup-cover-section{position:relative;width:100%;height:clamp(7.25rem,18vh,9rem)}
-        .popup-cover-image{position:absolute;top:0;left:0;width:100%;height:100%}
-        .popup-cover-image img{width:100%;height:100%;object-fit:cover;object-position:center}
-        .popup-profile-info{position:absolute;bottom:clamp(-3.375rem,-9vh,-2.75rem);left:1rem;display:flex;align-items:flex-end;gap:0.75rem;z-index:2}
-        .popup-profile-image{width:clamp(3.75rem,14vw,4.5rem);height:clamp(3.75rem,14vw,4.5rem);border-radius:50%;border:0.25rem solid #fff;overflow:hidden;background:#fff;box-shadow:0 0.125rem 0.5rem rgba(0,0,0,0.1)}
-        .popup-profile-image img{width:100%;height:100%;object-fit:cover;object-position:center}
-        .popup-profile-text{padding-bottom:0.5rem}
-        .popup-profile-name{font-size:clamp(0.875rem,4vw,1rem);font-weight:600;color:#333;display:flex;align-items:center;gap:0.25rem}
-        .popup-verified{display:flex;align-items:center}
-        .popup-verified svg{width:clamp(1rem,5vw,1.125rem);height:clamp(1rem,5vw,1.125rem)}
-        .popup-profile-username{font-size:clamp(0.75rem,3.5vw,0.875rem);color:#666;margin-top:0.125rem}
-        .popup-stats{position:absolute;bottom:1rem;right:1rem;display:flex;gap:1rem;color:#fff;font-size:clamp(0.75rem,3.5vw,0.875rem);text-shadow:0 0.0625rem 0.125rem rgba(0,0,0,0.5)}
-        .popup-stats span{display:flex;align-items:center;gap:0.25rem}
-        .popup-stats i{font-size:clamp(0.875rem,4vw,1rem)}
-        .close-button{position:absolute;top:1rem;right:1rem;z-index:10;background:rgba(0,0,0,0.5);border:none;color:#fff;font-size:clamp(1rem,5vw,1.25rem);cursor:pointer;width:2rem;height:2rem;border-radius:50%;display:flex;align-items:center;justify-content:center}
-        .popup-active{overflow:hidden}
-        .popup-content{margin-top:clamp(2.75rem,6.5vh,3.25rem);padding:1rem}
-        .popup-headline{padding:0 1.25rem;margin-top:0}
-        .popup-headline h2{font-size:clamp(0.9375rem,4.5vw,1.0625rem);font-weight:700;color:#555;text-align:center;line-height:1.4;margin-bottom:0.75rem}
-        .popup-verification-items{padding:0 1.25rem}
-        .verification-item{display:flex;align-items:center;gap:0.625rem;margin-bottom:0.75rem}
-        .check-icon{width:clamp(0.9rem,3vw,0.9rem);height:clamp(0.9rem,3vw,0.9rem);background-color:#ff6b3d;border-radius:50%;display:flex;align-items:center;justify-content:center}
-        .check-icon i{color:#fff;font-size:clamp(0.5rem,2.5vw,0.5625rem)}/*-REMOVED COMMENT-*/
-        .verification-item span:last-child{font-size:clamp(0.875rem,4vw,1rem);color:#424242}
-        .popup-additional-headline{text-align:center;margin:1.25rem 0 0.9375rem;width:110%;transform:translateX(-5%);margin-left:auto;margin-right:auto}
-        .popup-additional-headline h3{font-size:clamp(0.75rem,3.5vw,0.875rem);font-weight:600;color:#555;line-height:1.4}
-        .subscription-button-popup{display:flex;align-items:center;justify-content:space-between;padding:0.75rem 1.25rem;width:calc(100% - 1.875rem);margin:0.5rem auto 0.125rem;border:none;border-radius:9999px;background:linear-gradient(to right,#f58370,#f5a55b);color:#fff;font-family:"Montserrat",sans-serif;font-weight:500;cursor:pointer;box-shadow:0 0.125rem 0.25rem rgba(0,0,0,0.1);transition:opacity 0.2s;will-change:opacity;position:static}
-        .subscription-button-popup:hover{opacity:0.9}.subscription-button-popup span{font-size:clamp(1.125rem,5vw,1.3125rem)}
-        .payment-trust{position:static;margin-top:0.375rem;display:flex;justify-content:center;gap:0.5rem;padding:0 1.25rem}
-        .trust-item{display:flex;align-items:center;gap:0.375rem}
-        .trust-item i{color:#ff6b3d;font-size:clamp(0.625rem,3vw,0.75rem)}
-        .trust-item span{color:#666;font-size:clamp(0.6rem,2.6vw,0.656rem);font-weight:500;white-space:nowrap}
-        .popup-overlay.active .popup-container{animation:fadeIn 0.3s ease-out forwards}
-        @keyframes fadeIn{from{opacity:0;transform:translateY(-1.25rem)}to{opacity:1;transform:translateY(0)}}
-        @media screen and (device-width:375px) and (device-height:812px) and (-webkit-min-device-pixel-ratio:3){.popup-container{min-height:0}.popup-cover-section{height:clamp(10rem,28vh,12.5rem)}.popup-content{margin-top:clamp(2.5rem,6vh,3rem)}}
-        .feed-media .locked-media.blur-strong{filter:blur(7px);transform:scale(1.03);transform-origin:center;will-change:filter,transform}
     </style>
-    <link rel="stylesheet" href="css/all.min.css" media="print" onload="this.media='all'">
-    
-    <!-- Performance Optimization: Resource Hints -->
-    <link rel="dns-prefetch" href="https://cdn.utmify.com.br">
-    <link rel="dns-prefetch" href="https://connect.facebook.net">
-    <link rel="dns-prefetch" href="https://connect.facebook.net/en_US/fbevents.js">
-    <link rel="preconnect" href="https://cdn.utmify.com.br">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
-
-    <style type="text/css">
-        /* Evitar que notificações cubram o popup */
-
-        body.popup-active #notification-container {
-            display: none !important;
-        }
-
-        /* Posição e comportamento padrão das notificações */
-
-        #notification-container {
-            position: fixed !important;
-            bottom: 16px !important;
-            left: 16px !important;
-            right: auto !important;
-            max-width: 320px !important;
-            z-index: 999 !important;
-            /* abaixo do overlay do popup (9999) */
-            pointer-events: none;
-            /* não intercepta cliques */
-        }
-
-        #notification-container>div {
-            pointer-events: none;
-        }
-
-        @font-face {
-            font-family: Montserrat;
-            font-style: normal;
-            font-weight: 300;
-            src: url(fonts/normal_1.woff2);
-            unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
-            font-display: swap;
-        }
-
-        @font-face {
-            font-family: Montserrat;
-            font-style: normal;
-            font-weight: 300;
-            src: url(fonts/normal.woff2);
-            unicode-range: U+0460-052F, U+1C80-1C88, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
-            font-display: swap;
-        }
-
-        @font-face {
-            font-family: Montserrat;
-            font-style: normal;
-            font-weight: 300;
-            src: url(fonts/normal_2.woff2);
-            unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
-            font-display: swap;
-        }
-
-        @font-face {
-            font-family: Montserrat;
-            font-style: normal;
-            font-weight: 300;
-            src: url(fonts/normal_3.woff2);
-            unicode-range: U+0100-02AF, U+0304, U+0308, U+0329, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
-            font-display: swap;
-        }
-
-        @font-face {
-            font-family: Montserrat;
-            font-style: normal;
-            font-weight: 300;
-            src: url(fonts/normal_4.woff2);
-            unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
-            font-display: swap;
-        }
-
-        @font-face {
-            font-family: Montserrat;
-            font-style: normal;
-            font-weight: 400;
-            src: url(fonts/normal.woff2);
-            unicode-range: U+0460-052F, U+1C80-1C88, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
-            font-display: swap;
-        }
-
-        @font-face {
-            font-family: Montserrat;
-            font-style: normal;
-            font-weight: 400;
-            src: url(fonts/normal_4.woff2);
-            unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
-            font-display: swap;
-        }
-
-        @font-face {
-            font-family: Montserrat;
-            font-style: normal;
-            font-weight: 400;
-            src: url(fonts/normal_1.woff2);
-            unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
-            font-display: swap;
-        }
-
-        @font-face {
-            font-family: Montserrat;
-            font-style: normal;
-            font-weight: 400;
-            src: url(fonts/normal_2.woff2);
-            unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
-            font-display: swap;
-        }
-
-        @font-face {
-            font-family: Montserrat;
-            font-style: normal;
-            font-weight: 400;
-            src: url(fonts/normal_3.woff2);
-            unicode-range: U+0100-02AF, U+0304, U+0308, U+0329, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
-            font-display: swap;
-        }
-
-        @font-face {
-            font-family: Montserrat;
-            font-style: normal;
-            font-weight: 500;
-            src: url(fonts/normal_1.woff2);
-            unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
-            font-display: swap;
-        }
-
-        @font-face {
-            font-family: Montserrat;
-            font-style: normal;
-            font-weight: 500;
-            src: url(fonts/normal_4.woff2);
-            unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
-            font-display: swap;
-        }
-
-        @font-face {
-            font-family: Montserrat;
-            font-style: normal;
-            font-weight: 500;
-            src: url(fonts/normal.woff2);
-            unicode-range: U+0460-052F, U+1C80-1C88, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
-            font-display: swap;
-        }
-
-        @font-face {
-            font-family: Montserrat;
-            font-style: normal;
-            font-weight: 500;
-            src: url(fonts/normal_3.woff2);
-            unicode-range: U+0100-02AF, U+0304, U+0308, U+0329, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
-            font-display: swap;
-        }
-
-        @font-face {
-            font-family: Montserrat;
-            font-style: normal;
-            font-weight: 500;
-            src: url(fonts/normal_2.woff2);
-            unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
-            font-display: swap;
-        }
-
-        @font-face {
-            font-family: Montserrat;
-            font-style: normal;
-            font-weight: 600;
-            src: url(fonts/normal_3.woff2);
-            unicode-range: U+0100-02AF, U+0304, U+0308, U+0329, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
-            font-display: swap;
-        }
-
-        @font-face {
-            font-family: Montserrat;
-            font-style: normal;
-            font-weight: 600;
-            src: url(fonts/normal_4.woff2);
-            unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
-            font-display: swap;
-        }
-
-        @font-face {
-            font-family: Montserrat;
-            font-style: normal;
-            font-weight: 600;
-            src: url(fonts/normal_2.woff2);
-            unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
-            font-display: swap;
-        }
-
-        @font-face {
-            font-family: Montserrat;
-            font-style: normal;
-            font-weight: 600;
-            src: url(fonts/normal_1.woff2);
-            unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
-            font-display: swap;
-        }
-
-        @font-face {
-            font-family: Montserrat;
-            font-style: normal;
-            font-weight: 600;
-            src: url(fonts/normal.woff2);
-            unicode-range: U+0460-052F, U+1C80-1C88, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
-            font-display: swap;
-        }
-
-        @font-face {
-            font-family: Montserrat;
-            font-style: normal;
-            font-weight: 700;
-            src: url(fonts/normal_1.woff2);
-            unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
-            font-display: swap;
-        }
-
-        @font-face {
-            font-family: Montserrat;
-            font-style: normal;
-            font-weight: 700;
-            src: url(fonts/normal.woff2);
-            unicode-range: U+0460-052F, U+1C80-1C88, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
-            font-display: swap;
-        }
-
-        @font-face {
-            font-family: Montserrat;
-            font-style: normal;
-            font-weight: 700;
-            src: url(fonts/normal_2.woff2);
-            unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
-            font-display: swap;
-        }
-
-        @font-face {
-            font-family: Montserrat;
-            font-style: normal;
-            font-weight: 700;
-            src: url(fonts/normal_4.woff2);
-            unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
-            font-display: swap;
-        }
-
-        @font-face {
-            font-family: Montserrat;
-            font-style: normal;
-            font-weight: 700;
-            src: url(fonts/normal_3.woff2);
-            unicode-range: U+0100-02AF, U+0304, U+0308, U+0329, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
-            font-display: swap;
-        }
-
-        @font-face {
-            font-family: Montserrat;
-            font-style: normal;
-            font-weight: 800;
-            src: url(fonts/normal.woff2);
-            unicode-range: U+0460-052F, U+1C80-1C88, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
-            font-display: swap;
-        }
-
-        @font-face {
-            font-family: Montserrat;
-            font-style: normal;
-            font-weight: 800;
-            src: url(fonts/normal_2.woff2);
-            unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
-            font-display: swap;
-        }
-
-        @font-face {
-            font-family: Montserrat;
-            font-style: normal;
-            font-weight: 800;
-            src: url(fonts/normal_1.woff2);
-            unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
-            font-display: swap;
-        }
-
-        @font-face {
-            font-family: Montserrat;
-            font-style: normal;
-            font-weight: 800;
-            src: url(fonts/normal_4.woff2);
-            unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
-            font-display: swap;
-        }
-
-        @font-face {
-            font-family: Montserrat;
-            font-style: normal;
-            font-weight: 800;
-            src: url(fonts/normal_3.woff2);
-            unicode-range: U+0100-02AF, U+0304, U+0308, U+0329, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
-            font-display: swap;
-        }
-
-        @font-face {
-            font-family: Montserrat;
-            font-style: normal;
-            font-weight: 900;
-            src: url(fonts/normal_4.woff2);
-            unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
-            font-display: swap;
-        }
-
-        @font-face {
-            font-family: Montserrat;
-            font-style: normal;
-            font-weight: 900;
-            src: url(fonts/normal_3.woff2);
-            unicode-range: U+0100-02AF, U+0304, U+0308, U+0329, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
-            font-display: swap;
-        }
-
-        @font-face {
-            font-family: Montserrat;
-            font-style: normal;
-            font-weight: 900;
-            src: url(fonts/normal_2.woff2);
-            unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
-            font-display: swap;
-        }
-
-        @font-face {
-            font-family: Montserrat;
-            font-style: normal;
-            font-weight: 900;
-            src: url(fonts/normal_1.woff2);
-            unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
-            font-display: swap;
-        }
-
-        @font-face {
-            font-family: Montserrat;
-            font-style: normal;
-            font-weight: 900;
-            src: url(fonts/normal.woff2);
-            unicode-range: U+0460-052F, U+1C80-1C88, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
-            font-display: swap;
-        }
-    </style>
-
-    <!-- CSS para padronizar tamanhos, bordas e espaçamentos -->
-    <style>
-        /* Container padrão para vídeo e primeira imagem */
-
-        .content-section .video-container,
-        .content-section .photo-container {
-            width: 388px;
-            height: 670px;
-            overflow: hidden;
-        }
-
-        /* Elementos internos preenchem o container */
-
-        .content-section .video-container video,
-        .content-section .photo-container img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        /* Novo container para a segunda imagem: 350x670 */
-
-        .content-section .photo-container2 {
-            width: 350px;
-            height: 670px;
-            overflow: hidden;
-            /* Altere o valor de margin-left para mover horizontalmente a segunda imagem:
-           Valor positivo move para a direita; valor negativo para a esquerda */
-            margin-left: 7px;
-        }
-
-        .content-section .photo-container2 img {
-            width: 100%;
-            height: 100%;
-            /* Alterado de 120% para 100% para garantir bordas arredondadas */
-            object-fit: cover;
-        }
-
-        /* Aplica bordas arredondadas em ambas as imagens */
-
-        .content-section .photo-container img,
-        .content-section .photo-container2 img {
-            border-radius: 15px;
-        }
-
-        /* Espaçamento vertical para o segundo container */
-
-        .second-photo-section {
-            margin-top: 10px;
-            /* ajuste conforme necessário */
-        }
-
-        .old-price {
-            text-decoration: line-through;
-            text-decoration-color: rgba(255, 255, 255, 0.7);
-            font-size: 13px;
-            margin-right: 4px;
-        }
-
-        .top-bar {
-            background: #ff6b3d;
-            padding: 3px 0;
-            margin-bottom: 0;
-        }
-
-        .top-bar-content {
-            display: flex;
-            align-items: center;
-            justify-content: flex-start;
-            gap: 50px;
-            color: white;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 15px;
-        }
-
-        .top-bar-content span {
-            font-size: 12px;
-        }
-
-        /* Estiliza o aviso de promoção para ficar mais profissional */
-
-        .privacy-logo {
-            display: inline-flex;
-            align-items: center;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            padding: 6px 12px;
-            border-radius: 999px;
-            background: rgba(255, 255, 255, 0.12);
-            font-weight: 600;
-            letter-spacing: 0.2px;
-        }
-
-        /* Pulse para indicador verde das notificações */
-
-        @keyframes pulse {
-            0%,
-            100% {
-                opacity: 1;
-            }
-            50% {
-                opacity: 0.5;
-            }
-        }
-
-        .pulse {
-            animation: pulse 2s infinite;
-        }
-
-        /* Promotions */
-
-        .promotions {
-            margin-top: 1.5rem;
-        }
-
-        .promotions-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 0.5rem;
-            cursor: pointer;
-        }
-
-        .promotions-header h4 {
-            font-size: 0.875rem;
-            font-weight: 500;
-        }
-
-        .chevron {
-            color: var(--gray-400);
-            transition: transform 0.3s ease;
-        }
-
-        /* Content Tabs */
-
-        .tabs {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            border-radius: var(--radius);
-            overflow: hidden;
-            margin-bottom: 1rem;
-        }
-
-        .tab {
-            padding: 0.75rem;
-            text-align: center;
-            font-size: 0.875rem;
-            background-color: var(--gray-100);
-            border: none;
-            cursor: pointer;
-            transition: background-color 0.2s;
-            color: var(--gray-600);
-        }
-
-        .tab.active {
-            background-color: var(--orange-50);
-            color: var(--orange-500);
-            font-weight: 500;
-        }
-
-        .tab:first-child.active {
-            box-shadow: inset -1px 0 0 var(--orange-200);
-        }
-
-        .tab:last-child.active {
-            box-shadow: inset 1px 0 0 var(--orange-200);
-        }
-
-        .tab-content {
-            display: none;
-        }
-
-        /* Pricing panel (Assinaturas) */
-
-        .pricing-panel {
-            background: #ffffff;
-            border: 1px solid #ececec;
-            border-radius: 12px;
-            padding: 16px;
-            box-shadow: 0 1px 2px rgba(16, 24, 40, 0.04);
-            max-width: 380px;
-        }
-
-        .pricing-panel h3 {
-            font-size: 18px;
-            font-weight: 700;
-            color: #111827;
-            margin: 0 0 10px 0;
-        }
-
-        .tag-popular {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            background: #fff1e6;
-            color: #b45309;
-            font-weight: 700;
-            font-size: 12px;
-            padding: 6px 10px;
-            border-radius: 999px;
-            margin-bottom: 10px;
-        }
-
-        /* Badge promocional fora da tag principal, alinhada ao lado */
-
-        .header-promo {
-            margin-left: 8px;
-            vertical-align: middle;
-            display: inline-flex;
-        }
-
-        .pricing-panel a {
-            text-decoration: none;
-        }
-
-        .pricing-panel a:hover {
-            text-decoration: none;
-        }
-
-        /* Garantir que nenhum texto nos botões/links fique sublinhado */
-
-        .plan-primary,
-        .plan-primary:hover,
-        .plan-primary:focus,
-        .plan-primary:active,
-        .plan-primary:visited,
-        .plan-outline,
-        .plan-outline:hover,
-        .plan-outline:focus,
-        .plan-outline:active,
-        .plan-outline:visited,
-        .footer-cta a,
-        .footer-cta a:hover,
-        .footer-cta a:focus,
-        .footer-cta a:active,
-        .footer-cta a:visited {
-            text-decoration: none !important;
-        }
-
-        .plan-primary *,
-        .plan-outline * {
-            text-decoration: none !important;
-        }
-
-        .plan-primary {
-            width: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 12px;
-            background: linear-gradient(180deg, #ff7a1a 0%, #ff6b3d 100%);
-            color: #ffffff;
-            border: none;
-            border-radius: 10px;
-            padding: 14px 16px;
-            cursor: pointer;
-            box-shadow: 0 10px 24px rgba(255, 107, 61, 0.28);
-            transition: transform 0.06s ease, box-shadow 0.25s ease;
-            font-weight: 800;
-            position: relative;
-            overflow: hidden;
-            text-decoration: none;
-        }
-
-        .plan-primary:hover {
-            box-shadow: 0 14px 30px rgba(255, 107, 61, 0.38);
-            transform: translateY(-1px);
-            text-decoration: none;
-        }
-
-        .plan-primary:active {
-            transform: translateY(1px);
-        }
-
-        .plan-primary .plan-title {
-            font-size: 16px;
-            letter-spacing: 0.3px;
-            text-decoration: none;
-        }
-
-        .plan-primary .plan-price {
-            font-size: 20px;
-            letter-spacing: 0.3px;
-            text-decoration: none;
-            text-shadow: 0 1px 0 rgba(0, 0, 0, 0.18);
-        }
-
-        .plan-primary .plan-price::after {
-            content: "  →";
-            font-weight: 900;
-        }
-
-        .plan-primary .mini-badge {
-            margin-left: 4px;
-        }
-
-        /* shimmer */
-
-        .plan-primary::before {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: -60%;
-            width: 40%;
-            height: 100%;
-            background: linear-gradient(90deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.28) 50%, rgba(255, 255, 255, 0) 100%);
-            transform: skewX(-20deg);
-            animation: shimmer 2.4s infinite;
-        }
-
-        @keyframes shimmer {
-            0% {
-                left: -60%;
-            }
-            100% {
-                left: 120%;
-            }
-        }
-
-        .perk-chip {
-            display: inline-block;
-            margin-top: 8px;
-            background: #ffe8d9;
-            color: #7c2d12;
-            border-radius: 999px;
-            padding: 6px 10px;
-            font-weight: 800;
-            font-size: 12px;
-        }
-
-        .plan-outline {
-            width: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            flex-wrap: nowrap;
-            /* evita quebra para segunda linha */
-            gap: 12px;
-            background: #ffffff;
-            border: 1px solid #f5b490;
-            border-radius: 10px;
-            padding: 12px 14px;
-            margin-top: 10px;
-            cursor: pointer;
-            transition: border-color 0.2s ease, box-shadow 0.2s ease;
-        }
-
-        .plan-outline:hover {
-            border-color: #ff6b3d;
-            box-shadow: 0 6px 16px rgba(255, 107, 61, 0.12);
-        }
-
-        .plan-outline .left {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            color: #111827;
-            font-weight: 700;
-            text-decoration: none;
-            white-space: nowrap;
-            /* evita quebra entre rótulo e badge */
-            min-width: 0;
-            /* permite encolher quando o espaço é curto */
-        }
-
-        .plan-outline .right {
-            color: #111827;
-            font-weight: 800;
-            text-decoration: none;
-            white-space: nowrap;
-            /* mantém o preço em uma linha */
-            flex: 0 0 auto;
-            /* não deixa o preço encolher a ponto de quebrar */
-        }
-
-        .mini-badge {
-            display: inline-flex;
-            align-items: center;
-            padding: 3px 8px;
-            font-size: 12px;
-            font-weight: 600;
-            color: #6b7280;
-            background: #f3f4f6;
-            border-radius: 999px;
-            white-space: nowrap;
-            /* badge não quebra */
-        }
-
-        .plan-label {
-            white-space: nowrap;
-        }
-
-        @media (max-width: 380px) {
-            .plan-outline {
-                padding: 10px 12px;
-            }
-            .plan-outline .left {
-                gap: 6px;
-            }
-            .mini-badge {
-                font-size: 11px;
-                padding: 2px 6px;
-            }
-            .plan-label {
-                font-size: 14px;
-            }
-            .plan-outline .right {
-                font-size: 14px;
-            }
-        }
-
-        /* Telas extra estreitas: reserva espaço para o preço e limita a largura da seção esquerda */
-
-        @media (max-width: 360px) {
-            .plan-outline .left {
-                max-width: calc(100% - 96px);
-            }
-            /* ~96px reservados ao preço */
-            .plan-outline {
-                gap: 8px;
-            }
-        }
-
-        @media (max-width: 320px) {
-            .plan-outline .left {
-                max-width: calc(100% - 88px);
-            }
-            .plan-label {
-                font-size: 13px;
-            }
-            .plan-outline .right {
-                font-size: 13px;
-            }
-            .mini-badge {
-                font-size: 10px;
-                padding: 2px 5px;
-            }
-        }
-
-        .mini-badge.best {
-            background: #fff1e6;
-            color: #b45309;
-        }
-
-        .mini-badge.premium {
-            background: #e9f5ff;
-            color: #0b62a4;
-        }
-
-        /* Mini-badge verde clarinho para 'Promocional' */
-
-        .mini-badge.promo {
-            background: #ecfdf5;
-            /* verde bem claro */
-            color: #047857;
-            /* verde escuro para contraste */
-        }
-
-        /* Footer CTA container */
-
-        .footer-cta {
-            max-width: 380px;
-            margin: 28px auto 16px;
-            padding: 0 16px;
-        }
-
-        /* Notification container (bottom-right) */
-
-        #notification-container {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            z-index: 9999;
-            max-width: 320px;
-            display: flex;
-            flex-direction: column;
-            align-items: flex-end;
-            gap: 8px;
-            pointer-events: none;
-            /* permite clicar através quando não sobre toasts */
-        }
-
-        #notification-container>div {
-            pointer-events: auto;
-        }
-
-        /* Destaque para o plano recomendado (3 Meses) */
-
-        .plan-outline.featured {
-            border-color: #ff6b3d;
-            background: #fff7f3;
-            box-shadow: 0 8px 20px rgba(255, 107, 61, 0.12);
-        }
-
-        /* Ícone sutil no plano em destaque */
-
-        .plan-outline.featured .left::before {
-            content: "\1F451";
-            /*  */
-            display: inline-block;
-            margin-right: 6px;
-            font-size: 16px;
-        }
-
-        /* Chevron color override for this card */
-
-        .chevron {
-            color: #9ca3af;
-        }
-
-        .trust-inline {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-top: 10px;
-            color: #6b7280;
-            font-size: 12px;
-            font-weight: 600;
-            white-space: nowrap;
-            /* evita quebra de linha */
-            flex-wrap: nowrap;
-            /* mantém tudo em uma linha */
-        }
-
-        .trust-inline span {
-            white-space: nowrap;
-        }
-
-        .trust-inline i {
-            color: #10b981;
-            margin-right: 4px;
-        }
-
-        @media (max-width: 380px) {
-            .trust-inline {
-                font-size: 11px;
-                gap: 6px;
-            }
-        }
-
-        @media (max-width: 340px) {
-            .trust-inline {
-                font-size: 10px;
-                gap: 4px;
-            }
-        }
-
-        /* ===== Feed style gallery (cards) ===== */
-
-        .feed-gallery {
-            max-width: 560px;
-            margin: 18px auto 0;
-            padding: 0 6px;
-        }
-
-        .feed-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 12px;
-        }
-
-        .feed-card {
-            background: #fff;
-            border: 1px solid #e5e7eb;
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: 0 1px 2px rgba(16, 24, 40, 0.04);
-            contain: content;
-            /* isola pintura/layout para melhorar performance */
-            content-visibility: auto;
-            /* evita pintar fora da viewport em navegadores compatíveis */
-            contain-intrinsic-size: 640px;
-            /* reserva altura aproximada para evitar CLS */
-        }
-
-        @media (max-width: 600px) {
-            .feed-card {
-                box-shadow: 0 1px 1px rgba(0, 0, 0, 0.06);
-            }
-        }
-
-        .feed-header {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 10px;
-        }
-
-        .feed-avatar {
-            width: 28px;
-            height: 28px;
-            border-radius: 999px;
-            object-fit: cover;
-            flex: 0 0 auto;
-        }
-
-        .feed-head-text {
-            display: flex;
-            flex-direction: column;
-            line-height: 1.1;
-            flex: 1 1 auto;
-            min-width: 0;
-        }
-
-        .feed-name {
-            font-weight: 700;
-            color: #111827;
-            font-size: 13px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        .feed-handle {
-            color: #6b7280;
-            font-size: 12px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        .feed-media {
-            position: relative;
-            width: 100%;
-            aspect-ratio: 9/16;
-            background: #f3f4f6;
-        }
-
-        .feed-media .locked-media {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            filter: none;
-        }
-
-        /* Promove o vídeo para camada própria em mobile, reduzindo jank */
-
-        @media (max-width: 600px) {
-            .feed-media .locked-media {
-                backface-visibility: hidden;
-                transform: translateZ(0);
-                will-change: transform;
-            }
-        }
-
-        .lock-bubble {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 68px;
-            height: 68px;
-            border-radius: 999px;
-            background: rgba(255, 255, 255, 0.92);
-            display: grid;
-            place-items: center;
-            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
-            color: #9ca3af;
-            font-size: 22px;
-        }
-
-        @media (max-width: 600px) {
-            .lock-bubble {
-                box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
-            }
-        }
-
-        .stats-pill {
-            position: absolute;
-            bottom: 10px;
-            left: 10px;
-            display: inline-flex;
-            align-items: center;
-            gap: 12px;
-            background: rgba(17, 24, 39, 0.65);
-            color: #fff;
-            padding: 8px 12px;
-            border-radius: 999px;
-            font-size: 12px;
-            font-weight: 700;
-        }
-
-        .stats-pill i {
-            margin-right: 6px;
-        }
-
-        .feed-footer {
-            display: flex;
-            align-items: center;
-            justify-content: space-around;
-            padding: 10px;
-            color: #6b7280;
-        }
-
-        .feed-footer i {
-            font-size: 16px;
-        }
-
-        /* Força 1 coluna em todas as larguras */
-
-        @media (max-width: 680px) {
-            .feed-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        @media (max-width: 360px) {
-            .feed-name {
-                font-size: 12px;
-            }
-            .feed-handle {
-                font-size: 11px;
-            }
-            .feed-header {
-                gap: 8px;
-                padding: 8px;
-            }
-        }
-
-        .tab-content.active {
-            display: block;
-            /* display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 6px */
-        }
-
-        /* Estilos para o container de navegação */
-
-        .nav-container {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 10px 20px;
-            max-width: 1200px;
-            margin: 0 auto;
-            height: 70px;
-            /* Altura do container */
-            background-color: #fff;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-
-        /* Estilos para o logo */
-
-        .logo {
-            width: 175px;
-            /* largura máxima do espaço do logo */
-            height: 70px;
-            /* altura do espaço do logo */
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto;
-            /* Centraliza horizontalmente */
-            overflow: hidden;
-            /* evita vazamento visual */
-        }
-
-        .logo img {
-            height: 100%;
-            /* respeita a altura do container */
-            width: auto;
-            /* mantém proporção */
-            max-width: 100%;
-            /* não estoura lateralmente */
-            object-fit: contain;
-            /* garante encaixe sem cortar */
-            display: block;
-        }
-
-        /* Estilos para o container direito */
-
-        .right-container {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-        }
-
-        /* Estilos para o container de busca */
-
-        .search-container {
-            display: flex;
-            align-items: center;
-            width: 300px;
-            /* Largura do campo de busca */
-            height: 40px;
-            /* Altura do campo de busca */
-        }
-
-        .search-container input {
-            width: 100%;
-            height: 100%;
-            padding: 0 15px;
-            border: 1px solid #ddd;
-            border-radius: 20px;
-            font-size: 14px;
-        }
-
-        .search-button {
-            width: 40px;
-            /* Largura do botão de busca */
-            height: 40px;
-            /* Altura do botão de busca */
-            border: none;
-            background: none;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        /* Estilos para os ícones de navegação */
-
-        .nav-icons {
-            display: flex;
-            gap: 15px;
-        }
-
-        .icon-button {
-            width: 40px;
-            /* Largura dos botões de ícone */
-            height: 40px;
-            /* Altura dos botões de ícone */
-            border: none;
-            background: none;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 50%;
-            transition: background-color 0.3s;
-        }
-
-        .icon-button:hover {
-            background-color: #f5f5f5;
-        }
-
-        /* Estilos para o menu mobile */
-
-        .menu-mobile {
-            display: none;
-            /* Esconde em desktop */
-            width: 30px;
-            height: 30px;
-            border: none;
-            background: none;
-            cursor: pointer;
-            padding: 0;
-        }
-
-        /* Media query para dispositivos móveis */
-
-        @media (max-width: 768px) {
-            .nav-container {
-                height: 60px;
-                padding: 10px 15px;
-            }
-            .logo {
-                width: 140px;
-                /* menor no mobile */
-                height: 56px;
-                overflow: hidden;
-                /* reforça que não vaze no mobile */
-            }
-            .search-container {
-                display: none;
-                /* Esconde a busca em mobile */
-            }
-            .nav-icons {
-                display: none;
-                /* Esconde os ícones em mobile */
-            }
-            .menu-mobile {
-                display: block;
-                /* Mostra o menu mobile */
-            }
-        }
-
-        /* Ajustes do aviso no topo para mobile */
-
-        @media (max-width: 600px) {
-            .top-bar-content {
-                gap: 10px;
-                justify-content: center;
-                padding: 0 10px;
-            }
-            /* Esconde a imagem lateral no topo no mobile para evitar quebra */
-            .top-bar-content>img {
-                display: none;
-            }
-            .privacy-logo {
-                font-size: 12px;
-                padding: 6px 14px;
-                background: rgba(255, 255, 255, 0.14);
-            }
-        }
-
-        /* Estilos para os botões de assinatura */
-
-        .subscription-button {
-            background: linear-gradient(135deg, #ff6b3d 0%, #ff8f5f 100%);
-            color: white;
-            border: none;
-            border-radius: 12px;
-            padding: 16px 32px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            width: 100%;
-            max-width: 320px;
-            margin: 12px auto;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 15px;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 4px 6px rgba(255, 107, 61, 0.1);
-            position: relative;
-            overflow: hidden;
-            animation: pulse 2s infinite;
-        }
-
-        .subscription-button::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-            transition: 0.5s;
-        }
-
-        .subscription-button:hover {
-            transform: translateY(-2px) scale(1.02);
-            box-shadow: 0 8px 20px rgba(255, 107, 61, 0.3);
-        }
-
-        .subscription-button:hover::before {
-            left: 100%;
-        }
-
-        .subscription-button:active {
-            transform: translateY(0) scale(0.98);
-            box-shadow: 0 2px 4px rgba(255, 107, 61, 0.1);
-        }
-
-        .subscription-button span {
-            display: inline-block;
-            text-align: center;
-            position: relative;
-            z-index: 1;
-        }
-
-        .subscription-button span:first-child {
-            font-size: 18px;
-            font-weight: 700;
-            letter-spacing: 0.5px;
-        }
-
-        .subscription-button span:last-child {
-            font-size: 14px;
-            opacity: 0.95;
-            font-weight: 500;
-        }
-
-        /* Estilos para o botão do popup */
-
-        .subscription-button-popup {
-            background: linear-gradient(135deg, #ff6b3d 0%, #ff8f5f 100%);
-            color: white;
-            border: none;
-            border-radius: 12px;
-            padding: 16px 32px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            width: 100%;
-            max-width: 320px;
-            margin: 12px auto 6px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 15px;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 4px 6px rgba(255, 107, 61, 0.1);
-            position: relative;
-            overflow: hidden;
-            animation: pulse 2s infinite;
-        }
-
-        .subscription-button-popup::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-            transition: 0.5s;
-        }
-
-        .subscription-button-popup:hover {
-            transform: translateY(-2px) scale(1.02);
-            box-shadow: 0 8px 20px rgba(255, 107, 61, 0.3);
-        }
-
-        .subscription-button-popup:hover::before {
-            left: 100%;
-        }
-
-        .subscription-button-popup:active {
-            transform: translateY(0) scale(0.98);
-            box-shadow: 0 2px 4px rgba(255, 107, 61, 0.1);
-        }
-
-        .subscription-button-popup span {
-            display: inline-block;
-            text-align: center;
-            position: relative;
-            z-index: 1;
-        }
-
-        .subscription-button-popup span:first-child {
-            font-size: 18px;
-            font-weight: 700;
-            letter-spacing: 0.5px;
-        }
-
-        .subscription-button-popup span:last-child {
-            font-size: 14px;
-            opacity: 0.95;
-            font-weight: 500;
-        }
-
-        @keyframes pulse {
-            0% {
-                box-shadow: 0 4px 6px rgba(255, 107, 61, 0.1);
-            }
-            50% {
-                box-shadow: 0 4px 15px rgba(255, 107, 61, 0.4);
-            }
-            100% {
-                box-shadow: 0 4px 6px rgba(255, 107, 61, 0.1);
-            }
-        }
-
-        /* Espaço extra abaixo do botão "Mostrar mais" */
-
-        .bio-toggle {
-            display: inline-block;
-            margin-bottom: 16px;
-        }
-    </style>
-    <!-- Pixel UTMify moved to footer to ensure window.pixelId is set first -->
-    <!-- Back Redirect -->
     <script>
         (function() {
             var backUrl = new URL('../back/index.html', window.location.href).href;
@@ -1625,18 +184,15 @@
             });
         })();
     </script>
-
-</head>
-
-<body>
+</head><body>
     <header>
         <nav class="navbar">
             <div class="top-bar">
                 <div class="top-bar-content">
                     <img src="images/Untitled%20image%20%2825%29.png" width="100px" alt="Privacy Logo">
 
-                    <!-- Conteúdo Principal -->
-                    <div class="privacy-logo" id="privacy-logo">ESSA PROMOÇÃO É VÁLIDA ATÉ 03/09/2025</div>
+                    <!-- Conte├║do Principal -->
+                    <div class="privacy-logo" id="privacy-logo">ESSA PROMO├ç├âO ├ë V├üLIDA AT├ë 03/09/2025</div>
                     <script type="f6968d3933020259f586cb25-text/javascript">
                         function getFormattedDate(daysAhead = 3) {
                             const today = new Date();
@@ -1649,8 +205,8 @@
 
                         document.addEventListener("DOMContentLoaded", () => {
                             const banner = document.getElementById("privacy-logo");
-                            const expirationDate = getFormattedDate(0); // Altere o número para mudar os dias
-                            banner.textContent = `ESSA PROMOÇÃO É VÁLIDA ATÉ ${expirationDate}`;
+                            const expirationDate = getFormattedDate(0); // Altere o n├║mero para mudar os dias
+                            banner.textContent = `ESSA PROMO├ç├âO ├ë V├üLIDA AT├ë ${expirationDate}`;
                         });
                     </script>
                 </div>
@@ -1669,12 +225,12 @@
                             <button class="icon-button" title="Adicionar">
                 <i class="fas fa-plus"></i>
               </button>
-                            <button class="icon-button" title="Comentários">
+                            <button class="icon-button" title="Coment├írios">
                 <i class="fas fa-comment-alt"></i>
               </button>
                         </div>
                     </div>
-                    <!-- Botão/globo do menu mobile removido temporariamente
+                    <!-- Bot├úo/globo do menu mobile removido temporariamente
           <button class="menu-mobile">
             <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 30 30.000001" preserveAspectRatio="xMidYMid meet">
               <path fill="#4b4a4a" d="M 15.914062 0.542969 C 7.472656 0 0.484375 6.988281 1.023438 15.429688 C 1.472656 22.410156 7.105469 28.046875 14.085938 28.492188 C 22.527344 29.03125 29.515625 22.042969 28.976562 13.601562 C 28.527344 6.625 22.894531 0.988281 15.914062 0.542969 Z M 21.339844 21.464844 C 21.890625 19.574219 22.21875 17.394531 22.265625 15.054688 L 27.914062 15.054688 C 27.789062 18.058594 26.636719 20.796875 24.800781 22.933594 C 23.957031 22.34375 22.777344 21.84375 21.339844 21.464844 Z M 5.199219 22.933594 C 3.363281 20.796875 2.210938 18.058594 2.085938 15.054688 L 7.734375 15.054688 C 7.78125 17.394531 8.109375 19.574219 8.660156 21.464844 C 7.222656 21.84375 6.042969 22.34375 5.199219 22.933594 Z M 8.65625 7.578125 C 8.105469 9.46875 7.777344 11.640625 7.734375 13.976562 L 2.085938 13.976562 C 2.210938 10.988281 3.351562 8.261719 5.171875 6.128906 C 6.03125 6.710938 7.21875 7.203125 8.65625 7.578125 Z M 14.460938 13.976562 L 8.8125 13.976562 C 8.859375 11.75 9.191406 9.644531 9.730469 7.824219 C 11.1875 8.117188 12.800781 8.285156 14.460938 8.316406 Z M 14.460938 15.054688 L 14.460938 20.71875 C 12.800781 20.746094 11.183594 20.917969 9.734375 21.214844 C 9.191406 19.394531 8.859375 17.285156 8.8125 15.054688 Z M 15.539062 15.054688 L 21.1875 15.054688 C 21.140625 17.285156 20.808594 19.394531 20.265625 21.214844 C 18.816406 20.917969 17.199219 20.746094 15.539062 20.71875 Z M 15.539062 15.054688 L 15.539062 8.316406 C 17.199219 8.285156 18.8125 8.117188 20.269531 7.824219 C 20.808594 9.644531 21.140625 11.75 21.1875 13.976562 Z M 15.539062 7.238281 L 15.539062 1.644531 C 17.308594 1.980469 18.890625 3.945312 19.929688 6.792969 C 18.574219 7.058594 17.078125 7.210938 15.539062 7.238281 Z M 14.460938 1.644531 L 14.460938 7.238281 C 12.921875 7.210938 11.425781 7.058594 10.070312 6.792969 C 11.109375 3.945312 12.691406 1.980469 14.460938 1.644531 Z M 14.460938 21.792969 L 14.460938 27.390625 C 12.691406 27.054688 11.113281 25.089844 10.074219 22.242188 C 11.421875 21.976562 12.917969 21.824219 14.460938 21.792969 Z M 15.539062 27.390625 L 15.539062 21.792969 C 17.082031 21.824219 18.578125 21.976562 19.925781 22.242188 C 18.886719 25.089844 17.308594 27.054688 15.539062 27.390625 Z M 22.265625 13.976562 C 22.222656 11.640625 21.894531 9.46875 21.34375 7.578125 C 22.78125 7.203125 23.96875 6.710938 24.828125 6.128906 C 26.648438 8.261719 27.789062 10.988281 27.914062 13.976562 Z M 24.082031 5.328125 C 23.328125 5.804688 22.273438 6.226562 21.015625 6.546875 C 20.339844 4.636719 19.421875 3.082031 18.339844 2.027344 C 20.539062 2.617188 22.507812 3.773438 24.082031 5.328125 Z M 8.984375 6.550781 C 7.726562 6.226562 6.671875 5.804688 5.917969 5.328125 C 7.492188 3.773438 9.460938 2.617188 11.660156 2.027344 C 10.578125 3.082031 9.660156 4.636719 8.984375 6.550781 Z M 5.945312 23.730469 C 6.683594 23.246094 7.730469 22.820312 8.988281 22.492188 C 9.664062 24.398438 10.582031 25.953125 11.660156 27.003906 C 9.472656 26.417969 7.515625 25.273438 5.945312 23.730469 Z M 21.011719 22.492188 C 22.269531 22.820312 23.316406 23.246094 24.054688 23.730469 C 22.484375 25.273438 20.527344 26.417969 18.339844 27.003906 C 19.417969 25.953125 20.335938 24.398438 21.011719 22.492188 Z M 21.011719 22.492188"/>
@@ -1720,14 +276,14 @@
                 <div class="profile-bio">
                     <div class="bio-container">
                         <p class="bio-text" id="bioText">
-                            🔥 Sofia Queiroz – Vazamento Exclusivo no Privacy 🔥 Conteúdo premium liberado por um valor MUITO abaixo do habitual. Corpo escultural entregue sem filtros: 💦 Boquetes profundos e molhados que vão até o limite 🍑 Sentadas intensas, reboladas que hipnotizam
-                            🔞 Gemidos reais, orgasmos sem cortes, close-ups explícitos Material que era restrito aos assinantes mais fiéis… agora acessível por tempo limitado e por um preço que não vai se repetir. Não perca a chance de ver a Sofia
-                            se entregando de verdade. 👉 Entre agora e garanta o seu antes que volte ao valor original. 😈 Quantidade limitada • Acesso imediato • 100% sem censura
+                            ­ƒöÑ Sofia Queiroz ÔÇô Vazamento Exclusivo no Privacy ­ƒöÑ Conte├║do premium liberado por um valor MUITO abaixo do habitual. Corpo escultural entregue sem filtros: ­ƒÆª Boquetes profundos e molhados que v├úo at├® o limite ­ƒìæ Sentadas intensas, reboladas que hipnotizam
+                            ­ƒö× Gemidos reais, orgasmos sem cortes, close-ups expl├¡citos Material que era restrito aos assinantes mais fi├®isÔÇª agora acess├¡vel por tempo limitado e por um pre├ºo que n├úo vai se repetir. N├úo perca a chance de ver a Sofia
+                            se entregando de verdade. ­ƒæë Entre agora e garanta o seu antes que volte ao valor original. ­ƒÿê Quantidade limitada ÔÇó Acesso imediato ÔÇó 100% sem censura
                         </p>
                         <button class="bio-toggle" id="bioToggle">Mostrar mais</button>
                     </div>
 
-                    <!-- Início: bloco de ícones de redes sociais (removido temporariamente)
+                    <!-- In├¡cio: bloco de ├¡cones de redes sociais (removido temporariamente)
           <div class="social-links">
             <div class="social-link twitter">
               <i class="fab fa-twitter"></i>
@@ -1742,7 +298,7 @@
               <i class="fab fa-telegram"></i>
             </div>
           </div>
-          Fim: bloco de ícones de redes sociais -->
+          Fim: bloco de ├¡cones de redes sociais -->
 
                     <!-- Popup -->
                     <div class="popup-overlay" id="popupOverlay">
@@ -1784,7 +340,7 @@
                             <!-- Popup Content -->
                             <div class="popup-content">
                                 <div class="popup-headline">
-                                    <h2>ASSINE AGORA E OBTENHA ESTES BENEFÍCIOS</h2>
+                                    <h2>ASSINE AGORA E OBTENHA ESTES BENEF├ìCIOS</h2>
                                 </div>
 
                                 <div class="popup-verification-items">
@@ -1792,7 +348,7 @@
                                         <span class="check-icon">
                       <i class="fas fa-check"></i>
                     </span>
-                                        <span> Acesso a todos conteúdos exclusivos </span>
+                                        <span> Acesso a todos conte├║dos exclusivos </span>
                                     </div>
                                     <div class="verification-item">
                                         <span class="check-icon">
@@ -1840,29 +396,29 @@
                     <!-- Novo painel de Assinaturas -->
                     <div class="pricing-panel">
                         <h3>Assinaturas</h3>
-                        <div class="tag-popular">VEJA TUDO AGORA 🔥</div>
+                        <div class="tag-popular">VEJA TUDO AGORA ­ƒöÑ</div>
                         <span class="mini-badge promo header-promo">Promocional</span>
 
                         <a class="plan-primary" role="button" aria-label="Assinar 15 dias por R$ 9,90" href="javascript:void(0)" onclick="abrirPixDireto('15 Dias', 9.90)">
               <span class="plan-title">15 Dias</span>
               <span class="plan-price">R$ 9,90</span>
             </a>
-                        <div class="perk-chip" aria-hidden="false" role="note">NÃO PERCA ESSA OFERTA!</div>
+                        <div class="perk-chip" aria-hidden="false" role="note">N├âO PERCA ESSA OFERTA!</div>
 
                         <div class="trust-inline">
                             <span><i class="fas fa-lock"></i> Pagamento 100% seguro</span>
-                            <span>•</span>
+                            <span>ÔÇó</span>
                             <span><i class="fas fa-bolt"></i> Acesso imediato</span>
                         </div>
 
                         <div class="promotions">
                             <div class="promotions-header" role="button" aria-expanded="true">
-                                <h4>Promoções</h4>
-                                <span class="chevron">⌄</span>
+                                <h4>Promo├º├Áes</h4>
+                                <span class="chevron">Ôîä</span>
                             </div>
 
                             <a class="plan-outline subscription-link featured" role="button" href="javascript:void(0)" onclick="abrirPixDireto('30 Dias', 14.90)">
-                <span class="left"><span class="plan-label">30 Dias</span> <span class="mini-badge best">Mais popular 🔥</span></span>
+                <span class="left"><span class="plan-label">30 Dias</span> <span class="mini-badge best">Mais popular ­ƒöÑ</span></span>
                 <span class="right">R$ 14,90</span>
               </a>
 
@@ -1884,20 +440,20 @@
                         <button class="toggle-btn disabled" data-type="posts" disabled="">
               <span class="count">502</span> Posts
             </button>
-                        <span class="separator">•</span>
+                        <span class="separator">ÔÇó</span>
                         <button class="toggle-btn active" data-type="videos">
               <span class="count">148</span> Videos
             </button>
-                        <span class="separator">•</span>
+                        <span class="separator">ÔÇó</span>
                         <button class="toggle-btn" data-type="photos">
               <span class="count">354</span> Fotos
             </button>
                     </div>
 
                     <!-- Galeria estilo feed (2x2) -->
-                    <section class="feed-gallery" aria-label="Prévia de conteúdos">
+                    <section class="feed-gallery" aria-label="Pr├®via de conte├║dos">
                         <div class="feed-grid">
-                            <!-- Card 1 - Vídeo -->
+                            <!-- Card 1 - V├¡deo -->
                             <article class="feed-card">
                                 <header class="feed-header">
                                     <img class="feed-avatar" src="images/perfil1.png" alt="Avatar da Sofia Queiroz" loading="lazy" decoding="async" width="48" height="48">
@@ -1955,7 +511,7 @@
                                     </div>
                                 </header>
                                 <div class="feed-media" style="cursor: pointer;" onclick="document.querySelector('.pricing-panel').scrollIntoView({behavior: 'smooth'})">
-                                    <img class="locked-media" src="images/imagempagina3.png" alt="Prévia de foto 1" loading="lazy" decoding="async" width="600" height="800">
+                                    <img class="locked-media" src="images/imagempagina3.png" alt="Pr├®via de foto 1" loading="lazy" decoding="async" width="600" height="800">
                                     <div class="lock-bubble"><i class="fas fa-lock"></i></div>
                                     <div class="stats-pill">
                                         <span><i class="far fa-heart"></i> 55.3K</span>
@@ -1984,10 +540,10 @@
                         <div class="faq-item">
                             <button class="faq-question">
                 <span class="faq-icon"></span>
-                É sigiloso? Vai aparecer na fatura?
+                ├ë sigiloso? Vai aparecer na fatura?
               </button>
                             <div class="faq-answer">
-                                Sim, é sigiloso. Cobrança discreta, sem nomes chamativos. Seus dados ficam criptografados.
+                                Sim, ├® sigiloso. Cobran├ºa discreta, sem nomes chamativos. Seus dados ficam criptografados.
                             </div>
                         </div>
 
@@ -1997,7 +553,7 @@
                 Quando tenho acesso depois do pagamento?
               </button>
                             <div class="faq-answer">
-                                Imediato. Pagamento aprovado = liberação em até 10s e e-mail contendo o login de acesso.
+                                Imediato. Pagamento aprovado = libera├º├úo em at├® 10s e e-mail contendo o login de acesso.
                             </div>
                         </div>
 
@@ -2007,7 +563,7 @@
                 Posso cancelar quando quiser? A assinatura renova?
               </button>
                             <div class="faq-answer">
-                                Sim. Você pode cancelar a renovação automática pela área do assinante a qualquer momento.
+                                Sim. Voc├¬ pode cancelar a renova├º├úo autom├ítica pela ├írea do assinante a qualquer momento.
                             </div>
                         </div>
 
@@ -2017,14 +573,14 @@
                 Tem reembolso?
               </button>
                             <div class="faq-answer">
-                                Sim. Reembolso de 7 dias sem burocracia. Se não curtir, devolvemos 100%.
+                                Sim. Reembolso de 7 dias sem burocracia. Se n├úo curtir, devolvemos 100%.
                             </div>
                         </div>
 
                         <div class="faq-item">
                             <button class="faq-question">
                 <span class="faq-icon"></span>
-                Como funciona a “Chat telegram”?
+                Como funciona a ÔÇ£Chat telegramÔÇØ?
               </button>
                             <div class="faq-answer">
                                 Basta mandar uma mensagem no chat do produtor e combinar.
@@ -2034,10 +590,10 @@
                         <div class="faq-item">
                             <button class="faq-question">
                 <span class="faq-icon"></span>
-                Posso pedir conteúdo personalizado?
+                Posso pedir conte├║do personalizado?
               </button>
                             <div class="faq-answer">
-                                Sim! Solciitações podem ser feitas no chat do produtor, com o conteúdo desejado.
+                                Sim! Solciita├º├Áes podem ser feitas no chat do produtor, com o conte├║do desejado.
                             </div>
                         </div>
                     </div>
@@ -2054,8 +610,8 @@
 
         <p class="footer-legal-links">
             <a href="">Termos de Uso</a>
-            <span class="separator">•</span>
-            <a href="">Política de Privacidade</a>
+            <span class="separator">ÔÇó</span>
+            <a href="">Pol├¡tica de Privacidade</a>
         </p>
     </main>
     <script type="text/javascript">
@@ -2093,21 +649,21 @@
 
 
 
-    <!-- Notificações Popup -->
+    <!-- Notifica├º├Áes Popup -->
     <div id="notification-container"></div>
 
     <script type="f6968d3933020259f586cb25-text/javascript">
-        // Sistema de Notificações (menos intrusivo)
+        // Sistema de Notifica├º├Áes (menos intrusivo)
         const names = [
-            "Alessandro Silva", "Carlos Eduardo", "João Pedro", "Rafael Santos",
+            "Alessandro Silva", "Carlos Eduardo", "Jo├úo Pedro", "Rafael Santos",
             "Bruno Costa", "Felipe Oliveira", "Gustavo Lima", "Lucas Almeida",
-            "Thiago Ferreira", "Diego Rocha", "Marcelo Souza", "André Pereira",
+            "Thiago Ferreira", "Diego Rocha", "Marcelo Souza", "Andr├® Pereira",
             "Roberto Martins", "Fernando Gomes", "Paulo Henrique", "Mateus Silva",
-            "Gabriel Santos", "Leonardo Costa", "Ricardo Barbosa", "Julio César",
+            "Gabriel Santos", "Leonardo Costa", "Ricardo Barbosa", "Julio C├®sar",
             "Rodrigo Alves", "Vinicius Lima", "Fabio Nascimento", "Eduardo Santos"
         ];
 
-        // Apenas planos elegíveis (3 meses pra cima)
+        // Apenas planos eleg├¡veis (3 meses pra cima)
         const eligiblePlans = ["3 Meses", "1 Ano"];
 
         // Controle de mute (persistente por localStorage)
@@ -2116,12 +672,12 @@
             notifMuted = localStorage.getItem('notifMuted') === '1';
         } catch (e) {}
 
-        // Cria e mostra uma notificação
+        // Cria e mostra uma notifica├º├úo
         function createNotification(name, plan, timeAgo) {
             const container = document.getElementById('notification-container');
             if (!container) return;
             if (notifMuted) return;
-            // Exibe no máximo uma por vez
+            // Exibe no m├íximo uma por vez
             if (container.children.length > 0) return;
 
             const notification = document.createElement('div');
@@ -2152,12 +708,12 @@
               <div style="font-size: 11px; opacity: 0.8; margin-top: 2px; color:#6b7280">${timeAgo}</div>
             </div>
           </div>
-          <button aria-label="Silenciar notificações" title="Silenciar notificações" style="position:absolute;top:6px;right:8px;background:transparent;border:none;color:#b45309;font-size:16px;line-height:1;cursor:pointer">×</button>
+          <button aria-label="Silenciar notifica├º├Áes" title="Silenciar notifica├º├Áes" style="position:absolute;top:6px;right:8px;background:transparent;border:none;color:#b45309;font-size:16px;line-height:1;cursor:pointer">├ù</button>
         `;
 
             container.appendChild(notification);
 
-            // Clique no X silencia todas as próximas e remove atual
+            // Clique no X silencia todas as pr├│ximas e remove atual
             const closeBtn = notification.querySelector('button');
             if (closeBtn) {
                 closeBtn.addEventListener('click', (e) => {
@@ -2173,7 +729,7 @@
                 });
             }
 
-            // Clique no toast também silencia
+            // Clique no toast tamb├®m silencia
             notification.addEventListener('click', () => {
                 notifMuted = true;
                 try {
@@ -2190,7 +746,7 @@
                 notification.style.transform = 'translateX(0)';
             });
 
-            // Remover após 3.5s
+            // Remover ap├│s 3.5s
             setTimeout(() => {
                 notification.style.transform = 'translateX(340px)';
                 setTimeout(() => {
@@ -2201,9 +757,9 @@
 
         function getRandomTimeAgo() {
             const times = [
-                "há 2 minutos", "há 5 minutos", "há 8 minutos", "há 1 minuto",
-                "há 3 minutos", "há 7 minutos", "há 4 minutos", "há 6 minutos",
-                "há 10 minutos", "há 15 minutos", "agora mesmo"
+                "h├í 2 minutos", "h├í 5 minutos", "h├í 8 minutos", "h├í 1 minuto",
+                "h├í 3 minutos", "h├í 7 minutos", "h├í 4 minutos", "h├í 6 minutos",
+                "h├í 10 minutos", "h├í 15 minutos", "agora mesmo"
             ];
             return times[Math.floor(Math.random() * times.length)];
         }
@@ -2215,17 +771,17 @@
             createNotification(name, plan, timeAgo);
         }
 
-        // Iniciar notificações com menos frequência
+        // Iniciar notifica├º├Áes com menos frequ├¬ncia
         function startNotifications() {
             if (notifMuted) return;
             let shownCount = 0;
             const maxPerSession = 6;
 
             const scheduleNext = () => {
-                if (notifMuted || shownCount >= maxPerSession) return; // limite de sessões
-                const interval = 18000 + Math.floor(Math.random() * 10000); // 18–28s
+                if (notifMuted || shownCount >= maxPerSession) return; // limite de sess├Áes
+                const interval = 18000 + Math.floor(Math.random() * 10000); // 18ÔÇô28s
                 setTimeout(() => {
-                    // evitar empilhar se já houver uma visível
+                    // evitar empilhar se j├í houver uma vis├¡vel
                     const container = document.getElementById('notification-container');
                     if (!notifMuted && container && container.children.length === 0) {
                         showRandomNotification();
@@ -2235,7 +791,7 @@
                 }, interval);
             };
 
-            // Primeira após 5–8s
+            // Primeira ap├│s 5ÔÇô8s
             const firstDelay = 5000 + Math.floor(Math.random() * 3000);
             setTimeout(() => {
                 const container = document.getElementById('notification-container');
@@ -2248,26 +804,26 @@
         }
 
         document.addEventListener("DOMContentLoaded", () => {
-            // Iniciar sistema de notificações
+            // Iniciar sistema de notifica├º├Áes
             startNotifications();
-            // Melhorias para reprodução de vídeo no iOS
+            // Melhorias para reprodu├º├úo de v├¡deo no iOS
             const video = document.querySelector(".post-video");
 
             if (video) {
-                // Função para tentar iniciar o vídeo de várias maneiras
+                // Fun├º├úo para tentar iniciar o v├¡deo de v├írias maneiras
                 const tryPlayVideo = () => {
-                    // Tenta reproduzir o vídeo
+                    // Tenta reproduzir o v├¡deo
                     const playPromise = video.play();
 
                     if (playPromise !== undefined) {
                         playPromise
                             .then(() => {
-                                console.log("Vídeo iniciado com sucesso");
+                                console.log("V├¡deo iniciado com sucesso");
                             })
                             .catch((error) => {
-                                console.log("Erro ao iniciar vídeo:", error);
+                                console.log("Erro ao iniciar v├¡deo:", error);
 
-                                // Se falhar, tenta novamente após um pequeno atraso
+                                // Se falhar, tenta novamente ap├│s um pequeno atraso
                                 setTimeout(() => {
                                     video
                                         .play()
@@ -2279,13 +835,13 @@
                     }
                 };
 
-                // Tenta iniciar o vídeo imediatamente
+                // Tenta iniciar o v├¡deo imediatamente
                 tryPlayVideo();
 
-                // Tenta novamente quando a página estiver totalmente carregada
+                // Tenta novamente quando a p├ígina estiver totalmente carregada
                 window.addEventListener("load", tryPlayVideo);
 
-                // Tenta novamente com interação do usuário
+                // Tenta novamente com intera├º├úo do usu├írio
                 document.body.addEventListener(
                     "touchstart",
                     () => {
@@ -2297,13 +853,13 @@
                     }
                 );
 
-                // Verifica se o vídeo está pausado e tenta reproduzir novamente
+                // Verifica se o v├¡deo est├í pausado e tenta reproduzir novamente
                 setInterval(() => {
                     if (video.paused) {
                         video
                             .play()
                             .catch((e) =>
-                                console.log("Falha ao reiniciar vídeo pausado:", e)
+                                console.log("Falha ao reiniciar v├¡deo pausado:", e)
                             );
                     }
                 }, 1000);
@@ -2399,7 +955,7 @@
                 cookieConsent.style.display = "none";
             });
 
-            // Adicionar efeito de pulsar aos botões quando passar o mouse
+            // Adicionar efeito de pulsar aos bot├Áes quando passar o mouse
             const outlineButtons = document.querySelectorAll(".outline-button");
 
             outlineButtons.forEach((button) => {
@@ -2412,7 +968,7 @@
                 });
             });
 
-            // Otimização: autoplay apenas quando visível; pausa quando fora da viewport
+            // Otimiza├º├úo: autoplay apenas quando vis├¡vel; pausa quando fora da viewport
             try {
                 const feedVideos = Array.from(document.querySelectorAll('.feed-media video.locked-media'));
                 if (feedVideos.length) {
@@ -2429,13 +985,13 @@
                         } catch (e) {}
                     };
                     const io = new IntersectionObserver((entries) => {
-                        // Registro das razões de visibilidade para determinar o "melhor" vídeo
+                        // Registro das raz├Áes de visibilidade para determinar o "melhor" v├¡deo
                         if (!window.__vidVis) window.__vidVis = new Map();
                         entries.forEach(entry => {
                             window.__vidVis.set(entry.target, entry.intersectionRatio || 0);
                         });
 
-                        // Decide qual vídeo deve tocar (o com maior interseção)
+                        // Decide qual v├¡deo deve tocar (o com maior interse├º├úo)
                         let best = null;
                         let bestRatio = 0;
                         window.__vidVis.forEach((ratio, v) => {
@@ -2446,7 +1002,7 @@
                         });
                         const isMobileNarrow = window.matchMedia && window.matchMedia('(max-width: 768px)').matches;
                         const minToPlay = isMobileNarrow ? 0.2 : 0.35;
-                        // Pausa todos primeiro, depois toca apenas o melhor (se suficientemente visível)
+                        // Pausa todos primeiro, depois toca apenas o melhor (se suficientemente vis├¡vel)
                         feedVideos.forEach(pauseHidden);
                         if (best && bestRatio >= minToPlay) playVisible(best);
                     }, {
@@ -2460,7 +1016,7 @@
                         feedVideos.forEach(pauseHidden);
                         if (scrollT) clearTimeout(scrollT);
                         scrollT = setTimeout(() => {
-                            // Reavalia visibilidade após scroll parar
+                            // Reavalia visibilidade ap├│s scroll parar
                             try {
                                 io.takeRecords();
                             } catch (e) {}
@@ -2495,24 +1051,24 @@
             <div style="background:linear-gradient(135deg,#ff7a1a,#ff6b3d);padding:18px 20px;display:flex;align-items:center;justify-content:space-between;">
                 <div>
                     <div style="color:#fff;font-size:13px;font-weight:600;opacity:0.9;">Pagamento via Pix</div>
-                    <div id="pix-modal-plan-label" style="color:#fff;font-size:20px;font-weight:800;margin-top:2px;">15 Dias – R$ 14,90</div>
+                    <div id="pix-modal-plan-label" style="color:#fff;font-size:20px;font-weight:800;margin-top:2px;">15 Dias ÔÇô R$ 14,90</div>
                 </div>
-                <button onclick="fecharPixModal()" style="background:rgba(255,255,255,0.2);border:none;color:#fff;width:36px;height:36px;border-radius:50%;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;">✕</button>
+                <button onclick="fecharPixModal()" style="background:rgba(255,255,255,0.2);border:none;color:#fff;width:36px;height:36px;border-radius:50%;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;">Ô£ò</button>
             </div>
 
             <!-- Form step -->
             <div id="pix-modal-form" style="padding:24px 20px;">
-                <p style="font-size:14px;color:#6b7280;text-align:center;margin-bottom:20px;line-height:1.5;">🔒 <strong>SIGILO TOTAL:</strong> Receba o acesso direto no seu WhatsApp</p>
+                <p style="font-size:14px;color:#6b7280;text-align:center;margin-bottom:20px;line-height:1.5;">­ƒöÆ <strong>SIGILO TOTAL:</strong> Receba o acesso direto no seu WhatsApp</p>
                 <div style="margin-bottom:20px;">
-                    <label style="display:block;font-size:12px;font-weight:700;color:#374151;margin-bottom:6px;text-transform:uppercase;letter-spacing:0.5px;">WhatsApp (DDD + Número)</label>
+                    <label style="display:block;font-size:12px;font-weight:700;color:#374151;margin-bottom:6px;text-transform:uppercase;letter-spacing:0.5px;">WhatsApp (DDD + N├║mero)</label>
                     <input id="pix-form-phone" type="tel" placeholder="(00) 00000-0000" maxlength="15" style="width:100%;box-sizing:border-box;border:1.5px solid #e5e7eb;border-radius:10px;padding:12px 14px;font-size:16px;font-family:'Montserrat',sans-serif;outline:none;transition:border-color 0.2s;text-align:center;font-weight:700;"
                         onfocus="this.style.borderColor='#ff6b3d'" onblur="this.style.borderColor='#e5e7eb'" oninput="maskPhone(this)">
                     <span id="pix-form-phone-err" style="display:none;color:#b91c1c;font-size:12px;margin-top:4px;display:block;text-align:center;"></span>
                 </div>
                 <button onclick="confirmarDadosEGerarPix()" style="width:100%;background:linear-gradient(135deg,#ff7a1a,#ff6b3d);color:#fff;border:none;border-radius:12px;padding:15px;font-size:16px;font-weight:800;cursor:pointer;font-family:'Montserrat',sans-serif;letter-spacing:0.3px;">
-        GERAR PIX E RECEBER AGORA →
+        GERAR PIX E RECEBER AGORA ÔåÆ
       </button>
-                <p style="font-size:11px;color:#9ca3af;text-align:center;margin-top:12px;"><i class="fas fa-lock" style="margin-right:4px;"></i>Nenhum dado pessoal extra será solicitado.</p>
+                <p style="font-size:11px;color:#9ca3af;text-align:center;margin-top:12px;"><i class="fas fa-lock" style="margin-right:4px;"></i>Nenhum dado pessoal extra ser├í solicitado.</p>
             </div>
             <script>
                 function maskPhone(i) {
@@ -2541,7 +1097,7 @@
 
                 <div style="background:#f3f4f6;border-radius:10px;padding:12px;display:flex;align-items:center;gap:8px;margin-bottom:14px;">
                     <span id="pix-modal-code" style="flex:1;font-size:11px;color:#374151;word-break:break-all;font-family:monospace;"></span>
-                    <button id="pix-modal-copy-btn" onclick="copiarPixModal()" style="background:#ff6b3d;color:#fff;border:none;border-radius:8px;padding:8px 14px;font-size:13px;font-weight:700;cursor:pointer;font-family:'Montserrat',sans-serif;white-space:nowrap;flex-shrink:0;">📋 Copiar</button>
+                    <button id="pix-modal-copy-btn" onclick="copiarPixModal()" style="background:#ff6b3d;color:#fff;border:none;border-radius:8px;padding:8px 14px;font-size:13px;font-weight:700;cursor:pointer;font-family:'Montserrat',sans-serif;white-space:nowrap;flex-shrink:0;">­ƒôï Copiar</button>
                 </div>
 
                 <div id="pix-modal-status" style="display:flex;align-items:center;gap:8px;font-size:14px;font-weight:600;color:#6b7280;padding:10px 16px;background:#f3f4f6;border-radius:10px;margin-bottom:10px;">
@@ -2554,7 +1110,7 @@
 
             <!-- Success state -->
             <div id="pix-modal-success" style="display:none;padding:32px 20px;text-align:center;">
-                <div style="font-size:56px;margin-bottom:14px;">🎉</div>
+                <div style="font-size:56px;margin-bottom:14px;">­ƒÄë</div>
                 <h3 style="font-size:22px;font-weight:800;color:#047857;margin-bottom:8px;">Pagamento confirmado!</h3>
                 <p style="font-size:14px;color:#065f46;margin-bottom:20px;">Seu acesso foi liberado. Verifique seu e-mail para o login.</p>
                 <button onclick="fecharPixModal()" style="background:linear-gradient(135deg,#ff7a1a,#ff6b3d);color:#fff;border:none;border-radius:12px;padding:14px 32px;font-size:16px;font-weight:800;cursor:pointer;font-family:'Montserrat',sans-serif;">Fechar</button>
@@ -2562,7 +1118,7 @@
 
             <!-- Error state -->
             <div id="pix-modal-error" style="display:none;padding:32px 20px;text-align:center;">
-                <div style="font-size:48px;margin-bottom:14px;">⚠️</div>
+                <div style="font-size:48px;margin-bottom:14px;">ÔÜá´©Å</div>
                 <p id="pix-modal-error-text" style="font-size:15px;color:#b91c1c;font-weight:600;margin-bottom:20px;"></p>
                 <button onclick="fecharPixModal()" style="background:#6b7280;color:#fff;border:none;border-radius:12px;padding:12px 28px;font-size:14px;font-weight:700;cursor:pointer;font-family:'Montserrat',sans-serif;">Fechar</button>
             </div>
@@ -2588,7 +1144,7 @@
     </style>
 
     <script>
-        // ===== DADOS ALEATÓRIOS =====
+        // ===== DADOS ALEAT├ôRIOS =====
         var _nomes = ["Ana Lima", "Carlos Souza", "Mariana Costa", "Pedro Alves", "Fernanda Silva", "Rafael Gomes", "Juliana Rocha", "Bruno Ferreira", "Camila Santos", "Lucas Martins", "Beatriz Nunes", "Thiago Oliveira", "Larissa Mendes", "Felipe Castro", "Gabriela Ramos"];
         var _emails = ["mail", "inbox", "msg", "acesso", "conta"];
         var _domains = ["gmail.com", "hotmail.com", "outlook.com", "yahoo.com.br"];
@@ -2663,11 +1219,11 @@
             document.getElementById('pix-modal-qr').src = qrUrl;
             document.getElementById('pix-modal-code').textContent = code;
             _pixIdentifier = identifier;
-            // Salva identifier no localStorage para recuperar em caso de navegação
+            // Salva identifier no localStorage para recuperar em caso de navega├º├úo
             if (identifier) localStorage.setItem('pix_acesso_identifier', identifier);
             if (identifier) localStorage.setItem('pix_acesso_amount', String(_pixAmount));
             _iniciarTimer(15 * 60);
-            // Polling desativado: Sigilo Pay não fornece endpoint de status direto
+            // Polling desativado: Sigilo Pay n├úo fornece endpoint de status direto
             // if (identifier) _iniciarPolling(identifier);
         }
 
@@ -2742,9 +1298,9 @@
             var btn = document.getElementById('pix-modal-copy-btn');
             try {
                 navigator.clipboard.writeText(code).then(function() {
-                    btn.textContent = '✓ Copiado!';
+                    btn.textContent = 'Ô£ô Copiado!';
                     setTimeout(function() {
-                        btn.innerHTML = '📋 Copiar';
+                        btn.innerHTML = '­ƒôï Copiar';
                     }, 2000);
                 });
             } catch (e) {
@@ -2754,9 +1310,9 @@
                 ta.select();
                 document.execCommand('copy');
                 document.body.removeChild(ta);
-                btn.textContent = '✓ Copiado!';
+                btn.textContent = 'Ô£ô Copiado!';
                 setTimeout(function() {
-                    btn.innerHTML = '📋 Copiar';
+                    btn.innerHTML = '­ƒôï Copiar';
                 }, 2000);
             }
         }
@@ -2767,7 +1323,7 @@
 
 
 
-        // ===== VALIDAÇÃO E GERAÇÃO =====
+        // ===== VALIDA├ç├âO E GERA├ç├âO =====
         function confirmarDadosEGerarPix() {
             var phone = document.getElementById('pix-form-phone').value.trim();
             var phoneErr = document.getElementById('pix-form-phone-err');
@@ -2812,7 +1368,7 @@
                 })
                 .then(function(data) {
                     if (data.error) throw new Error(data.error);
-                    if (!data.pix_code) throw new Error('Erro ao gerar código PIX');
+                    if (!data.pix_code) throw new Error('Erro ao gerar c├│digo PIX');
                     
                     var qrUrl = data.pix_image || ('https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=' + encodeURIComponent(data.pix_code));
                     _mostrarPix(data.pix_code, qrUrl, data.identifier);
@@ -2832,7 +1388,7 @@
 
 
 
-    <!-- ==================== FUNÇÕES DE TRACKING COM TOKENS DA SIGILO + CAPI ==================== -->
+    <!-- ==================== FUN├ç├òES DE TRACKING COM TOKENS DA SIGILO + CAPI ==================== -->
     <script>
     // Tokens da SigiloPay
     const SIGILO_IC_TOKEN = "v3zc7szh";
@@ -2847,7 +1403,7 @@
         // === 1. Envia para UTMify ===
         if (window.UTMify && typeof window.UTMify.track === 'function') {
             window.UTMify.track(eventName, data);
-            console.log(`%c✅ UTMify ${eventName} enviado com sucesso`, 'color:#00ff00; font-weight:bold');
+            console.log(`%cÔ£à UTMify ${eventName} enviado com sucesso`, 'color:#00ff00; font-weight:bold');
             return;
         }
 
@@ -2874,23 +1430,23 @@
                 contents: data.contents || []
             };
             window.fbq('track', eventName, fbqData);
-            console.log(`%c🔄 Meta Pixel ${eventName} enviado (contingência)`, 'color:#00ccff; font-weight:bold');
+            console.log(`%c­ƒöä Meta Pixel ${eventName} enviado (conting├¬ncia)`, 'color:#00ccff; font-weight:bold');
         }
 
         if (attempts < maxAttempts) {
             setTimeout(() => trackEvent(eventName, data, attempts + 1), 500);
         } else {
-            console.error(`❌ FALHA CRÍTICA: UTMify não carregou para ${eventName}`);
+            console.error(`ÔØî FALHA CR├ìTICA: UTMify n├úo carregou para ${eventName}`);
         }
     }
 
-    // Clique no plano → InitiateCheckout
+    // Clique no plano ÔåÆ InitiateCheckout
     function abrirPixDireto(planLabel, amount) {
         _pixPlanLabel = planLabel;
         _pixAmount = amount;
 
         const labelEl = document.getElementById('pix-modal-plan-label');
-        if (labelEl) labelEl.textContent = `${planLabel} – R$ ${amount.toFixed(2).replace('.', ',')}`;
+        if (labelEl) labelEl.textContent = `${planLabel} ÔÇô R$ ${amount.toFixed(2).replace('.', ',')}`;
 
         trackEvent('InitiateCheckout', {
             value: amount,
@@ -2904,7 +1460,7 @@
         _mostrarForm();
     }
 
-    // Sucesso do pagamento → Purchase
+    // Sucesso do pagamento ÔåÆ Purchase
     function _mostrarSucesso() {
         document.getElementById('pix-modal-content').style.display = 'none';
         document.getElementById('pix-modal-success').style.display = 'block';
@@ -2919,15 +1475,16 @@
             transaction_id: SIGILO_COMPRA_TOKEN
         });
 
-        console.log('%c🎉 Purchase enviado com token da Sigilo!', 'color:#00ff00; font-weight:bold');
+        console.log('%c­ƒÄë Purchase enviado com token da Sigilo!', 'color:#00ff00; font-weight:bold');
 
         setTimeout(() => {
             window.location.href = '../up1/index.html' + window.location.search;
         }, 2800);
     }
     </script>
-    <!-- ==================== FIM DAS FUNÇÕES ==================== -->
+    <!-- ==================== FIM DAS FUN├ç├òES ==================== -->
 
 </body>
 
 </html>
+
